@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\Contact;
 use App\Models\Testimonal;
+use App\Models\Product;
 
 class HomeController extends Controller
 {
@@ -113,6 +114,22 @@ class HomeController extends Controller
     public function privacyDetails()
     {
         return view('auth.privacy-details');
+    }
+    public function store()
+    {
+        $products = Product::leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
+        ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
+        ->select(
+            'products.*',
+            'subcategory.id as subcategory_id',
+            'subcategory.name as subcategory_name',
+            'category.id as category_id',
+            'category.name as category_name'
+        )
+        ->latest('products.created_at')
+        ->get();
+
+        return view('auth.store', compact('products'));
     }
     
 }
