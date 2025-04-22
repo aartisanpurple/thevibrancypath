@@ -4,10 +4,52 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\Customer\ProfileController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\HomeController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
+
+Route::get('/', [HomeController::class, 'index'])->name('customer.home');
+Route::get('/about', [HomeController::class, 'about'])->name('customer.about');
+Route::get('/contact', [HomeController::class, 'contact'])->name('customer.contact');
+Route::get('/about', [HomeController::class, 'about'])->name('customer.about');
+Route::get('/blog', [HomeController::class, 'blog'])->name('customer.blog');
+Route::get('/blog-details/{id}', [HomeController::class, 'blogDetails'])->name('customer.blogDetails');
+Route::get('/coaching', [HomeController::class, 'coaching'])->name('customer.coaching');
+Route::get('/coaching-details', [HomeController::class, 'coachingDetails'])->name('customer.coachingDetails');
+Route::get('/products', [HomeController::class, 'products'])->name('customer.products');
+Route::get('/product-details', [HomeController::class, 'productDetails'])->name('customer.productDetails');
+Route::get('/order', [HomeController::class, 'order'])->name('customer.order');
+Route::get('/order-details', [HomeController::class, 'orderDetails'])->name('customer.orderDetails');
+Route::get('/cart', [HomeController::class, 'cart'])->name('customer.cart');
+Route::get('/cart-details', [HomeController::class, 'cartDetails'])->name('customer.cartDetails');
+Route::get('/checkout', [HomeController::class, 'checkout'])->name('customer.checkout');
+Route::get('/checkout-details', [HomeController::class, 'checkoutDetails'])->name('customer.checkoutDetails');
+Route::get('/faq', [HomeController::class, 'faq'])->name('customer.faq');
+Route::post('/contact', [HomeController::class, 'contactStore'])->name('customer.contact.store');
+// Customer Authentication Routes
+Route::middleware('guest')->group(function () {
+    // Login Routes
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'adminLogin'])->name('login.submit');
+    
+    // Registration Routes
+    // Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+    // Route::post('register', [RegisteredUserController::class, 'store'])->name('register.submit');
+    
+    // Password Reset Routes
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+    Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
+});
 
 // Protected Customer Routes
-Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function () {
+Route::middleware(['auth', 'check.usertype:customer'])->prefix('customer')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('customer.dashboard');
     Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders');
     Route::get('/profile', [ProfileController::class, 'show'])->name('customer.profile');
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('customer.logout');
 });

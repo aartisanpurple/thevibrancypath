@@ -14,16 +14,39 @@
             <div class="card">
                 <div class="card-body">
                     </p>
-                    <table id="datatable" class="table align-middle dt-responsive nowrap w-100 table-check dataTable no-footer dtr-inline">
-                        <thead>
+                    <table id="blogsTable" class="table table-bordered dt-responsive  table-sm align-middle" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead style="background-color: #f2f2f2;">
                             <tr>
                                 <th>Title</th>
                                 <th>Content</th>
                                 <th>Author</th>
                                 <th>Date Published</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($blogs as $blog)
+                                <tr>
+                                    <td style="width: 250px;">{{ $blog->title }}</td>
+                                    <td style="width: 500px;">{{ $blog->content }}</td>
+                                    <td style="width: 150px;">{{ $blog->author }}</td>
+                                    <td style="width: 150px;">{{ $blog->published_at }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.blog.edit', $blog->id) }}" class="btn btn-primary">
+                                            <i class="bx bx-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-danger delete-blog" 
+                                                data-url="{{ route('admin.blog.destroy', $blog->id) }}" 
+                                                data-id="{{ $blog->id }}"
+                                                data-title="{{ $blog->title }}">
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <!-- <tbody>
                             <tr>
                                 <td>10 Tips for Better Web Design</td>
                                 <td>Web design is crucial for creating a user-friendly experience. Here are 10 tips...</td>
@@ -65,13 +88,13 @@
                             </tr>
                             <tr>
                                 <td>The Future of Electric Vehicles</td>
-                                <td>Smart home technology is rapidly advancing. Here’s everything you need to know...</td>
+                                <td>Smart home technology is rapidly advancing. Here's everything you need to know...</td>
                                 <td>Amy Clark</td>
                                 <td>2025-02-08</td>
                             </tr>
                             <tr>
                                 <td>How to Improve Your SEO Ranking in 2025</td>
-                                <td>SEO continues to evolve. Here are the top strategies to improve your website’s
+                                <td>SEO continues to evolve. Here are the top strategies to improve your website's
                                     ranking...</td>
                                 <td>Chris Martinez</td>
                                 <td>2025-02-05</td>
@@ -103,12 +126,12 @@
                             </tr>
                             <tr>
                                 <td>How to Build an Engaged Online Community</td>
-                                <td>Building an engaged online community can help boost brand loyalty. Here’s how...</td>
+                                <td>Building an engaged online community can help boost brand loyalty. Here's how...</td>
                                 <td>John White</td>
                                 <td>2025-01-22</td>
                             </tr>
                             <tr>
-                                <td>What’s Next for Social Media Marketing?</td>
+                                <td>What's Next for Social Media Marketing?</td>
                                 <td>Social media is evolving rapidly. Find out what trends will dominate in 2025...</td>
                                 <td>Laura Green</td>
                                 <td>2025-01-20</td>
@@ -120,7 +143,7 @@
                                 <td>Steven Walker</td>
                                 <td>2025-01-18</td>
                             </tr>
-                        </tbody>
+                        </tbody> -->
                     </table>
 
 

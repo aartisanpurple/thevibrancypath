@@ -3,7 +3,7 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="index.html" class="logo logo-dark">
+                <a href="{{ route('admin.dashboard') }}" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{ asset('assets/images/logo.svg') }}" alt="" height="22">
                     </span>
@@ -12,7 +12,7 @@
                     </span>
                 </a>
 
-                <a href="{{ route('dashboard') }}" class="logo logo-light">
+                <a href="{{ route('admin.dashboard') }}" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="{{ asset('assets/images/vibrancy-logo.png') }}" alt="" height="22">
                     </span>
@@ -22,7 +22,7 @@
                 </a>
             </div>
 
-            <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
+            <button type="{{ route('admin.dashboard') }}" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
                 data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
                 <i class="fa fa-fw fa-bars"></i>
             </button>
@@ -104,14 +104,14 @@
                 <ul class="navbar-nav">
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="{{ route('dashboard') }}"
+                        <a class="nav-link dropdown-toggle arrow-none" href="{{ route('admin.dashboard') }}"
                             id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Dashboards</span>
                         </a>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard"
+                        <a class="nav-link dropdown-toggle arrow-none" href="{{ route('admin.user.index') }}" id="topnav-dashboard"
                             role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Users Management
                             </span>
@@ -177,7 +177,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-layout">
                             <div class="dropdown">
-                                <a class="nav-link dropdown-toggle arrow-none" href="#">Contact Us</a>
+                                <a class="nav-link dropdown-toggle arrow-none" href="{{ route('admin.contact.index') }}">Contact Us</a>
                                 <a class="nav-link dropdown-toggle arrow-none" href="{{ route('admin.blog.index') }}"
                                     id="topnav-dashboard" role="button">
                                     <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Blogs
@@ -214,11 +214,11 @@
                     </li>
 
                     {{-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="javascript:void(0)"
-                            id="topnav-dashboard" role="button">
-                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Contact Us
-                            </span>
-                        </a>
+                        <!--<a class="nav-link dropdown-toggle arrow-none" href="javascript:void(0)"-->
+                        <!--    id="topnav-dashboard" role="button">-->
+                        <!--    <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Contact Us-->
+                        <!--    </span>-->
+                        <!--</a>-->
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#"
