@@ -52,7 +52,7 @@ class HomeController extends Controller
     }
     public function coaching()
     {
-        return view('auth.coaching');
+        return view('auth.coaching'); 
     }
     public function coachingDetails()
     {
@@ -114,5 +114,6 @@ class HomeController extends Controller
     {
         return view('auth.privacy-details');
     }
+    
 }
 

@@ -29,6 +29,7 @@ Route::get('/checkout', [HomeController::class, 'checkout'])->name('customer.che
 Route::get('/checkout-details', [HomeController::class, 'checkoutDetails'])->name('customer.checkoutDetails');
 Route::get('/faq', [HomeController::class, 'faq'])->name('customer.faq');
 Route::post('/contact', [HomeController::class, 'contactStore'])->name('customer.contact.store');
+Route::get('/privacy', [HomeController::class, 'privacy'])->name('customer.privacy');
 // Customer Authentication Routes
 Route::middleware('guest')->group(function () {
     // Login Routes
