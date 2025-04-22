@@ -11,7 +11,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\OrdersController;
-
+use App\Http\Controllers\Admin\ContactController;
 // Admin Registration & Login
 Route::prefix('admin')->group(function () {
     Route::get('/register', [UserController::class, 'showRegisterForm'])->name('admin.register');
@@ -43,6 +43,23 @@ Route::middleware(['auth', 'check.usertype:admin'])->prefix('admin')->group(func
         'update' => 'admin.testimonial.update',
         'destroy' => 'admin.testimonial.destroy',
         'show' => 'admin.testimonial.show',
+    ]);
+    Route::resource('contact', ContactController::class)->names([
+        'index' => 'admin.contact.index',
+        'create' => 'admin.contact.create',
+        'store' => 'admin.contact.store',
+        'edit' => 'admin.contact.edit',
+        'update' => 'admin.contact.update',
+        'destroy' => 'admin.contact.destroy',
+    ]);
+    Route::resource('user', UserController::class)->names([
+        'index' => 'admin.user.index',
+        'create' => 'admin.user.create',
+        'store' => 'admin.user.store',
+        'edit' => 'admin.user.edit',
+        'update' => 'admin.user.update',
+        'destroy' => 'admin.user.destroy',
+        'show' => 'admin.user.show',
     ]);
     Route::resource('courses', CourseController::class);
     Route::resource('category', CategoryController::class);
