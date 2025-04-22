@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\Contact;
+use App\Models\Testimonal;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        return view('auth.home');
+        $testimonials = Testimonal::latest()->get();
+        return view('auth.home', compact('testimonials'));
     }
     public function about()
     {

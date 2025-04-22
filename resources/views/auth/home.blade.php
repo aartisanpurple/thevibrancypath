@@ -81,39 +81,16 @@
         <div class="container position-relative">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
+                @foreach($testimonials as $testimonial)
                     <div class="swiper-slide">
                         <div class="testimonial-card">
-                            <img src="{{ asset('assets/images/user1.png') }}" alt="Courtney Henry" class="rounded-circle">
-                            <h5>Courtney Henry</h5>
-                            <p>"I would just say it's amazing only three days and I'm able to settle using the
-                                techniques that Jamie taught me."</p>
+                            <img src="{{ asset($testimonial->image ?? 'assets/images/default-user.png') }}"  alt="Courtney Henry" class="rounded-circle">
+                            <h5>{{ $testimonial->name }}</h5>
+                            <p>{{ $testimonial->message }}</p>
                         </div>
                     </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <img src="{{ asset('assets/images/user2.png') }}" alt="Dianne Pine" class="rounded-circle">
-                            <h5>Dianne Pine</h5>
-                            <p>"Jamie's program has given me all the support I just needed to get through this difficult
-                                time in my life."</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <img src="{{ asset('assets/images/user3.png') }}" alt="Darlene Robertson" class="rounded-circle">
-                            <h5>Darlene Robertson</h5>
-                            <p>"Our relationship with Jamie more than met my expectations and brought me peace."</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <img src="{{ asset('assets/images/user4.png') }}" alt="Peri Smith" class="rounded-circle">
-                            <h5>Peri smith</h5>
-                            <p>"Thank you so much for the treasure trove of advice. We feel like we have a place to
-                                start."
-                            </p>
-                        </div>
-                    </div>
-
+                   
+                    @endforeach
                 </div>
                 
                
