@@ -19,7 +19,6 @@
 <section class="py-5" style="background-color: #faf7f3;">
   <div class="container">
     <div class="row g-4">
-
       <!-- Shopping Cart Table -->
       <div class="col-lg-8">
         <div class="card">
@@ -37,26 +36,23 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="cart-items">
                 @forelse ($cart as $item)
-                <tr>
+                <tr id="cart-item-{{ $item['id'] }}">
                   <td class="d-flex align-items-center gap-3">
-
                     <span>{{ $item['name'] }}</span>
                   </td>
                   <td>${{ number_format($item['price'], 2) }}</td>
                   <td>
                     <div class="input-group" style="max-width: 100px;">
-                      <button class="btn btn-outline-secondary btn-sm" disabled>-</button>
-                      <input type="text" class="form-control text-center" value="1" readonly>
-                      <button class="btn btn-outline-secondary btn-sm" disabled>+</button>
+                      <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="decrease" data-id="{{ $item['id'] }}">-</button>
+                      <input type="text" class="form-control text-center quantity" value="1" readonly>
+                      <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="increase" data-id="{{ $item['id'] }}">+</button>
                     </div>
                   </td>
-                  <td>${{ number_format($item['price'], 2) }}</td>
+                  <td class="item-total">${{ number_format($item['price'], 2) }}</td>
                   <td>
-
-                    <button class="btn btn-sm btn-link text-danger" type="submit">✕</button>
-
+                    <button class="btn btn-sm btn-link text-danger remove-item" data-id="{{ $item['id'] }}">✕</button>
                   </td>
                 </tr>
                 @empty
@@ -68,14 +64,9 @@
             </table>
 
             <!-- Bottom Buttons -->
-            <!-- Bottom Buttons -->
             <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
-              <a href="#" class="btn btn-outline-primary">
-                ← Continue Shopping
-              </a>
-
+              <a href="#" class="btn btn-outline-primary">← Continue Shopping</a>
               <div class="d-flex gap-2 align-items-center">
-                <!-- Clear Cart Button -->
                 <form action="{{ route('customer.clear') }}" method="POST">
                   @csrf
                   <button class="btn btn-outline-danger" type="submit">
@@ -83,15 +74,12 @@
                   </button>
                 </form>
 
-                <!-- Coupon Input -->
                 <div class="input-group" style="max-width: 300px;">
                   <input type="text" class="form-control" placeholder="Coupon Code">
                   <button class="btn btn-secondary">Apply</button>
                 </div>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -104,7 +92,7 @@
             <ul class="list-group list-group-flush mb-3">
               <li class="list-group-item d-flex justify-content-between">
                 <span>Sub-total</span>
-                <strong>$13.95</strong>
+                <strong id="sub-total">$13.95</strong>
               </li>
               <li class="list-group-item d-flex justify-content-between">
                 <span>Shipping</span>
@@ -120,14 +108,12 @@
               </li>
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Total</strong>
-                <strong>$13.95</strong>
+                <strong id="total">$13.95</strong>
               </li>
-            </ul> <a href="{{ route('customer.storecheckout') }}">
-              <button class="btn btn-primary w-100">
-
-                Proceed to Checkout →
-
-              </button></a>
+            </ul> 
+            <a href="{{ route('customer.storecheckout') }}">
+              <button class="btn btn-primary w-100">Proceed to Checkout →</button>
+            </a>
           </div>
         </div>
       </div>

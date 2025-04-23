@@ -11,6 +11,8 @@ use App\Models\Testimonal;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\Orders;
+use App\Models\OrderItems;
 
 class HomeController extends Controller
 {
@@ -312,10 +314,63 @@ class HomeController extends Controller
         return redirect()->back()->with('success', 'Cart has been cleared.');
     }
 
-
-    public function storeCheckout()
+    public function storeCheckout(Request $request)
     {
+        // Retrieve the cart from cookies
+        $cart = json_decode(Cookie::get('cart', '[]'), true);
 
-        return view('auth.store-checkout');
+        if (empty($cart)) {
+            return redirect()->back()->with('error', 'Your cart is empty.');
+        }
+
+        // Validate the request (you may need to modify the rules based on your needs)
+        $request->validate([
+            'first_name' => 'required|string',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'address1' => 'required',
+            'country' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'zip_code' => 'required',
+        ]);
+
+        // Calculate total price of the cart
+        $subTotal = 0;
+        foreach ($cart as $item) {
+            $subTotal += $item['price'] * $item['quantity'];
+        }
+
+        $totalAmount = $subTotal; // Add shipping/tax if applicable
+
+        // Store the order in the Orders table
+        $order = Orders::create([
+            'user_id' => 1,
+            'total_amount' => $totalAmount,
+            'order_status' => 'pending', // Order status: can be changed later
+            'payment_status' => 'unpaid', // Adjust based on payment status
+            'payment_method' => 'cod', // Payment method (can be modified)
+            'payment_id' => null, // This could be populated if using a payment gateway
+        ]);
+
+        // Save the order items in the OrderItems table
+        foreach ($cart as $item) {
+            OrderItems::create([
+                'order_id' => $order->id,
+                'category_id' => $item['category_id'] ?? null, // Handle category if provided
+                'subcategory_id' => $item['subcategory_id'] ?? null, // Handle subcategory if provided
+                'product_id' => $item['id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+                'total_price' => $item['price'] * $item['quantity'],
+            ]);
+        }
+
+        // Clear the cart (if you want to clear it after the order is placed)
+        Cookie::queue(Cookie::forget('cart'));
+
+        // Optionally, redirect to a "thank you" or "order confirmation" page
+        // return redirect()->route('order.success')->with('success', 'Your order has been placed successfully!');
+
     }
 }
