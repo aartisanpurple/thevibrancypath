@@ -12,7 +12,7 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.home') ? 'active' : '' }}" href="{{ route('customer.home') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.about') ? 'active' : '' }}" href="{{ route('customer.about') }}">About</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.course') ? 'active' : '' }}" href="javascript:void(0)">Courses</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.store') ? 'active' : '' }}" href="javascript:void(0)">Store</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.store') ? 'active' : '' }}" href="{{ route('customer.store') }}">Store</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.package') ? 'active' : '' }}" href="javascript:void(0)">Packages</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.blog') ? 'active' : '' }}" href="{{ route('customer.blog') }}">Blog</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}" href="{{ route('customer.contact') }}">Contact</a></li>
@@ -20,7 +20,7 @@
                 <div class="nav-icons">
                     <a href="javascript:void(0)"><i class="ri-user-line"></i></a>
                     <a href="javascript:void(0)"><i class="ri-search-line"></i></a>
-                    <a href="javascript:void(0)"><i class="ri-shopping-cart-line"></i></a>
+                    <a href="{{ route('customer.storecart') }}"><i class="ri-shopping-cart-line"></i></a>
                 </div>
             </div>
         </div>

@@ -31,6 +31,10 @@ Route::get('/faq', [HomeController::class, 'faq'])->name('customer.faq');
 Route::post('/contact', [HomeController::class, 'contactStore'])->name('customer.contact.store');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('customer.privacy');
 Route::get('/store', [HomeController::class, 'store'])->name('customer.store');
+Route::get('/store-details/{id}', [HomeController::class, 'storeDetails'])->name('customer.storeDetails');
+Route::get('/store-cart', [HomeController::class, 'storeCart'])->name('customer.storecart');
+Route::post('/store-savecart', [HomeController::class, 'storesavecart'])->name('customer.savecart');
+Route::get('/store-checkout', [HomeController::class, 'storeCheckout'])->name('customer.storecheckout');
 // Customer Authentication Routes
 Route::middleware('guest')->group(function () {
     // Login Routes
