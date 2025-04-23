@@ -121,7 +121,7 @@ class HomeController extends Controller
     public function store()
     {
         $categories = Category::with('subcategories')->get();
-    
+
         $products = Product::leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
             ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
             ->select(
@@ -133,10 +133,82 @@ class HomeController extends Controller
             )
             ->latest('products.created_at')
             ->paginate(6);
-    
+
         return view('auth.store', compact('products', 'categories'));
     }
-    
+    public function storeApi(Request $request)
+    {
+        // Example of products data, replace with your actual products logic
+        $products = Product::all(); // Fetch all products
+
+        // Check if the request is AJAX (to return JSON for AJAX requests)
+        if ($request->ajax()) {
+            return response()->json([
+                'products' => $products, // Send products as a JSON response
+                'status' => 'success',
+            ]);
+        }
+
+        // Regular request (non-AJAX) will return a view
+        return view('store', compact('products')); // Return the store view with products
+    }
+
+    // In CartController.php
+    public function updateCart(Request $request)
+    {
+        $productId = $request->product_id;
+        $quantity = $request->quantity;
+
+        // Update cart logic here (e.g., using session or database)
+        $cart = session()->get('cart', []);
+        if (isset($cart[$productId])) {
+            $cart[$productId]['quantity'] = $quantity;
+            session()->put('cart', $cart);
+        }
+
+        // Calculate updated cart values
+        $cartSubtotal = 0;
+        $cartTotal = 0;
+        foreach ($cart as $item) {
+            $cartSubtotal += $item['price'] * $item['quantity'];
+        }
+        $cartTotal = $cartSubtotal; // For simplicity, no tax or shipping
+
+        return response()->json([
+            'success' => true,
+            'new_price' => $cart[$productId]['price'],
+            'cart_subtotal' => $cartSubtotal,
+            'cart_total' => $cartTotal
+        ]);
+    }
+
+    public function removeFromCart(Request $request)
+    {
+        $productId = $request->product_id;
+
+        $cart = session()->get('cart', []);
+        if (isset($cart[$productId])) {
+            unset($cart[$productId]);
+            session()->put('cart', $cart);
+        }
+
+        // Recalculate the cart totals
+        $cartSubtotal = 0;
+        $cartTotal = 0;
+        foreach ($cart as $item) {
+            $cartSubtotal += $item['price'] * $item['quantity'];
+        }
+        $cartTotal = $cartSubtotal; // For simplicity, no tax or shipping
+
+        return response()->json([
+            'success' => true,
+            'cart_subtotal' => $cartSubtotal,
+            'cart_total' => $cartTotal,
+            'cart_count' => count($cart)
+        ]);
+    }
+
+
     public function search(Request $request)
     {
         $query = Product::query()
@@ -149,31 +221,31 @@ class HomeController extends Controller
                 'category.id as category_id',
                 'category.name as category_name'
             );
-    
+
         // Keyword search (grouped properly with parentheses)
         if ($request->filled('keyword')) {
             $query->where(function ($q) use ($request) {
                 $q->where('products.name', 'like', '%' . $request->keyword . '%')
-                  ->orWhere('products.description', 'like', '%' . $request->keyword . '%');
+                    ->orWhere('products.description', 'like', '%' . $request->keyword . '%');
             });
         }
-    
+
         // Filter by category
         if ($request->filled('category_id')) {
             $query->where('category.id', $request->category_id);
         }
-    
+
         // Filter by subcategory
         if ($request->filled('subcategory_id')) {
             $query->where('subcategory.id', $request->subcategory_id);
         }
-    
+
         $products = $query->latest('products.created_at')->paginate(6);
         $categories = Category::with('subcategories')->get();
-    
+
         return view('auth.store', compact('products', 'categories'));
     }
-    
+
 
     public function storeDetails($id)
     {
@@ -203,21 +275,43 @@ class HomeController extends Controller
         $cart = json_decode(Cookie::get('cart', '[]'), true);
 
         // Get product details from the request
-        $product = [
-            'id' => $request->input('product_id'),
-            'name' => $request->input('product_name'),
-            'price' => $request->input('product_price'),
-        ];
+        $productId = $request->input('product_id');
+        $productName = $request->input('product_name');
+        $productPrice = $request->input('product_price');
+        $quantity = $request->input('quantity', 1); // Default quantity is 1 if not provided
 
-        // Add the product to the cart
-        $cart[] = $product;
+        // Check if the product already exists in the cart
+        $productExists = false;
+        foreach ($cart as &$item) {
+            if ($item['id'] == $productId) {
+                $item['quantity'] += $quantity; // Increase quantity if product already exists
+                $productExists = true;
+                break;
+            }
+        }
+
+        // If the product does not exist in the cart, add it as a new product
+        if (!$productExists) {
+            $cart[] = [
+                'id' => $productId,
+                'name' => $productName,
+                'price' => $productPrice,
+                'quantity' => $quantity
+            ];
+        }
 
         // Store the updated cart in cookies
         Cookie::queue('cart', json_encode($cart), 60 * 24); // 1 day expiry
 
         return redirect()->back()->with('success', 'Product added to cart!');
-        // return view('auth.store-cart');
     }
+    public function clear()
+    {
+
+        Cookie::queue(Cookie::forget('cart'));
+        return redirect()->back()->with('success', 'Cart has been cleared.');
+    }
+
 
     public function storeCheckout()
     {
