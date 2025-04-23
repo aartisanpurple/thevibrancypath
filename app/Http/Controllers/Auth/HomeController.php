@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -55,7 +56,7 @@ class HomeController extends Controller
     }
     public function coaching()
     {
-        return view('auth.coaching'); 
+        return view('auth.coaching');
     }
     public function coachingDetails()
     {
@@ -119,37 +120,75 @@ class HomeController extends Controller
     }
     public function store()
     {
-        $category = Category::with('subcategories')->get(); 
-      
+        $categories = Category::with('subcategories')->get();
+    
         $products = Product::leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
-        ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
-        ->select(
-            'products.*',
-            'subcategory.id as subcategory_id',
-            'subcategory.name as subcategory_name',
-            'category.id as category_id',
-            'category.name as category_name'
-        )
-        ->latest('products.created_at')
-        ->get();
-
-       // return view('auth.store', compact('products'));
-        return view('auth.store', compact('products', 'category'));
+            ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
+            ->select(
+                'products.*',
+                'subcategory.id as subcategory_id',
+                'subcategory.name as subcategory_name',
+                'category.id as category_id',
+                'category.name as category_name'
+            )
+            ->latest('products.created_at')
+            ->paginate(6);
+    
+        return view('auth.store', compact('products', 'categories'));
     }
+    
+    public function search(Request $request)
+    {
+        $query = Product::query()
+            ->leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
+            ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
+            ->select(
+                'products.*',
+                'subcategory.id as subcategory_id',
+                'subcategory.name as subcategory_name',
+                'category.id as category_id',
+                'category.name as category_name'
+            );
+    
+        // Keyword search (grouped properly with parentheses)
+        if ($request->filled('keyword')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('products.name', 'like', '%' . $request->keyword . '%')
+                  ->orWhere('products.description', 'like', '%' . $request->keyword . '%');
+            });
+        }
+    
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category.id', $request->category_id);
+        }
+    
+        // Filter by subcategory
+        if ($request->filled('subcategory_id')) {
+            $query->where('subcategory.id', $request->subcategory_id);
+        }
+    
+        $products = $query->latest('products.created_at')->paginate(6);
+        $categories = Category::with('subcategories')->get();
+    
+        return view('auth.store', compact('products', 'categories'));
+    }
+    
+
     public function storeDetails($id)
     {
         $store = Product::find($id);
         $products = Product::leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
-        ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
-        ->select(
-            'products.*',
-            'subcategory.id as subcategory_id',
-            'subcategory.name as subcategory_name',
-            'category.id as category_id',
-            'category.name as category_name'
-        )
-        ->latest('products.created_at')
-        ->get();
+            ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
+            ->select(
+                'products.*',
+                'subcategory.id as subcategory_id',
+                'subcategory.name as subcategory_name',
+                'category.id as category_id',
+                'category.name as category_name'
+            )
+            ->latest('products.created_at')
+            ->get();
         return view('auth.store-detail', compact('store', 'products'));
     }
     public function storeCart()
@@ -161,32 +200,28 @@ class HomeController extends Controller
     public function storesavecart(Request $request)
     {
         // Retrieve the cart from the cookies, if it exists, or create a new one.
-    $cart = json_decode(Cookie::get('cart', '[]'), true);
+        $cart = json_decode(Cookie::get('cart', '[]'), true);
 
-    // Get product details from the request
-    $product = [
-        'id' => $request->input('product_id'),
-        'name' => $request->input('product_name'),
-        'price' => $request->input('product_price'),
-    ];
+        // Get product details from the request
+        $product = [
+            'id' => $request->input('product_id'),
+            'name' => $request->input('product_name'),
+            'price' => $request->input('product_price'),
+        ];
 
-    // Add the product to the cart
-    $cart[] = $product;
+        // Add the product to the cart
+        $cart[] = $product;
 
-    // Store the updated cart in cookies
-    Cookie::queue('cart', json_encode($cart), 60 * 24); // 1 day expiry
+        // Store the updated cart in cookies
+        Cookie::queue('cart', json_encode($cart), 60 * 24); // 1 day expiry
 
-    return redirect()->back()->with('success', 'Product added to cart!');
-       // return view('auth.store-cart');
+        return redirect()->back()->with('success', 'Product added to cart!');
+        // return view('auth.store-cart');
     }
 
     public function storeCheckout()
     {
-       
+
         return view('auth.store-checkout');
     }
-
-
-    
 }
-

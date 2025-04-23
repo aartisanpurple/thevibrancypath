@@ -31,6 +31,7 @@ Route::get('/faq', [HomeController::class, 'faq'])->name('customer.faq');
 Route::post('/contact', [HomeController::class, 'contactStore'])->name('customer.contact.store');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('customer.privacy');
 Route::get('/store', [HomeController::class, 'store'])->name('customer.store');
+Route::get('/store-search', [HomeController::class, 'search'])->name('customer.storesearch');
 Route::get('/store-details/{id}', [HomeController::class, 'storeDetails'])->name('customer.storeDetails');
 Route::get('/store-cart', [HomeController::class, 'storeCart'])->name('customer.storecart');
 Route::post('/store-savecart', [HomeController::class, 'storesavecart'])->name('customer.savecart');
@@ -40,11 +41,11 @@ Route::middleware('guest')->group(function () {
     // Login Routes
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'adminLogin'])->name('login.submit');
-    
+
     // Registration Routes
     // Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
     // Route::post('register', [RegisteredUserController::class, 'store'])->name('register.submit');
-    
+
     // Password Reset Routes
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
