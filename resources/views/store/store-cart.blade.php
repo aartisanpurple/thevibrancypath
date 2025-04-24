@@ -165,11 +165,11 @@
             $('#sub-total').text(res.subtotalFormatted);
             $('#total').text(res.totalFormatted);
           } else {
-           // alert('Error updating cart');
+            // alert('Error updating cart');
           }
         },
         error: function() {
-         // alert('Failed to update cart');
+          // alert('Failed to update cart');
         }
       });
     });
@@ -194,7 +194,7 @@
             $('#sub-total').text(res.subtotalFormatted);
             $('#total').text(res.totalFormatted);
           } else {
-           // alert('Error removing item from cart');
+            // alert('Error removing item from cart');
           }
         },
         error: function() {

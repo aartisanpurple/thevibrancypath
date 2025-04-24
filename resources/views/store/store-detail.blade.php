@@ -33,10 +33,10 @@
       <div class="col-md-4 text-center d-flex align-items-center justify-content-center">
         <div>
           <img id="mainProductImage"
-               src="{{ url('/' . $store->image) }}"
-               class="img-fluid border rounded"
-               alt="{{ $store->name }}"
-               style="max-height: 400px; object-fit: contain;">
+            src="{{ url('/' . $store->image) }}"
+            class="img-fluid border rounded"
+            alt="{{ $store->name }}"
+            style="max-height: 400px; object-fit: contain;">
           <a href="{{ url('/' . $store->image) }}" target="_blank" class="d-block mt-2 text-decoration-underline small text-muted">
             View Full Size
           </a>
@@ -73,10 +73,10 @@
             <button class="btn btn-outline-secondary quantity-increase" type="button">+</button>
           </div>
           <button class="btn btn-primary px-4 add-to-cart"
-                  data-id="{{ $store->id }}"
-                  data-name="{{ $store->name }}"
-                  data-price="{{ $store->price }}"
-                  data-img="{{ $store->image }}">
+            data-id="{{ $store->id }}"
+            data-name="{{ $store->name }}"
+            data-price="{{ $store->price }}"
+            data-img="{{ $store->image }}">
             Add to cart
           </button>
         </div>
@@ -89,15 +89,15 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  $(document).ready(function () {
+  $(document).ready(function() {
 
     // Quantity increase/decrease
-    $('.quantity-increase').click(function () {
+    $('.quantity-increase').click(function() {
       let qty = parseInt($('#productQuantity').val()) || 1;
       $('#productQuantity').val(qty + 1);
     });
 
-    $('.quantity-decrease').click(function () {
+    $('.quantity-decrease').click(function() {
       let qty = parseInt($('#productQuantity').val()) || 1;
       if (qty > 1) {
         $('#productQuantity').val(qty - 1);
@@ -105,7 +105,7 @@
     });
 
     // AJAX Add to Cart
-    $('.add-to-cart').click(function (e) {
+    $('.add-to-cart').click(function(e) {
       e.preventDefault();
 
       const button = $(this);
@@ -126,13 +126,13 @@
           product_img: image,
           quantity: quantity
         },
-        success: function (response) {
+        success: function(response) {
           if (response.success) {
-            $('.cart-count').text(response.count); 
+            $('.cart-count').text(response.count);
             alert("Added to cart!");
           }
         },
-        error: function () {
+        error: function() {
           alert("Something went wrong. Try again.");
         }
       });

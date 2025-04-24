@@ -14,17 +14,17 @@
         </div>
     </div>
     <h4 class="text-center mt-3">Welcome to The Vibrancy Path.</h4>
-    
+
 </section>
 <section class="py-5" style="background-color: #faf7f3;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card text-center border-0 shadow-sm p-4">
-                  
+
                     <h4 class="mb-3">Your order successfully placed</h4>
                     <p class="text-muted mb-4">
-                       Thank You!
+                        Thank You!
                     </p>
                     <div class="d-flex justify-content-center gap-3">
                         <a href="/" class="btn btn-outline-secondary px-4">Go to homepage</a>
