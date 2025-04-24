@@ -22,7 +22,7 @@
                    <a href="javascript:void(0)"><i class="ri-search-line"></i></a>
                    @php
                    $cart = json_decode(request()->cookie('cart'), true) ?? [];
-                   $cartCount = array_sum(array_column($cart, 'quantity'));
+                   $cartCount = count($cart);
                    @endphp
                    <a href="{{ route('customer.storecart') }}" class="position-relative">
                        <i class="ri-shopping-cart-line" style="font-size: 1.2rem;"></i>

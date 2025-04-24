@@ -87,7 +87,7 @@ class CartController extends Controller
             Cookie::queue('cart', json_encode($cart), 60 * 24);
 
             // Calculate total item count in the cart
-            $count = array_sum(array_column($cart, 'quantity'));
+            $count = count($cart);
 
             // Return JSON response
             return response()->json([
