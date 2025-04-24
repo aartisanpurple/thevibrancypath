@@ -156,12 +156,17 @@ class CartController extends Controller
         $tax = 0;
         $total = $subtotal - $discount + $tax + $shipping;
 
-        // Render the cart items using a Blade partial
-        $cartHtml = view('partials.cart-items', ['cart' => $cart])->render();
+          // Store the updated cart in cookies
+          Cookie::queue('cart', json_encode($cart), 60 * 24); // 1 day expiry
+
+         // return redirect()->back()->with('success', 'Cart updated!');
+
+        // // Render the cart items using a Blade partial
+        // $cartHtml = view('partials.cart-items', ['cart' => $cart])->render();
 
         return response()->json([
             'success' => true,
-            'cartHtml' => $cartHtml,
+            //'cartHtml' => $cartHtml,
             'subtotalFormatted' => '$' . number_format($subtotal, 2),
             'totalFormatted' => '$' . number_format($total, 2),
         ]);
