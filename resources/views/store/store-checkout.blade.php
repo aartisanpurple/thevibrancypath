@@ -9,7 +9,6 @@
       <div class="row justify-content-center text-center">
         <div class="col-lg-10">
           <h2>Store</h2>
-          <p>Welcome to The Vibrancy Path. Use the category links on the sidebar to start shopping.</p>
         </div>
       </div>
     </div>

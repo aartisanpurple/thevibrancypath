@@ -8,12 +8,12 @@
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-3">
                     <h4>Quick Link</h4>
-                    <ul class="list-unstyled">
-                        <li><i class="fa-solid fa-arrow-right-long"></i></i><a href="#about">About</a></li>
-                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="#coaching">Coaching</a></li>
+                    <ul class="list-unstyled"> 
+                        <li><i class="fa-solid fa-arrow-right-long"></i></i><a href="{{ route('customer.about') }}">About</a></li>
+                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.coaching') }}">Coaching</a></li>
                         <li><i class="fa-solid fa-arrow-right-long"></i><a href="#courses">Courses</a></li>
-                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="#store">Store</a></li>
-                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="#privacy-policy">Privacy Policy</a>
+                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.store') }}">Store</a></li>
+                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.privacypolicy') }}">Privacy Policy</a>
                         </li>
                         <li><i class="fa-solid fa-arrow-right-long"></i><a href="#terms&conditions">Terms &
                                 Conditions</a></li>
@@ -55,10 +55,8 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/parsleyjs@2.9.2/dist/parsley.min.js"></script>
     <script src="{{ asset('assets/js/frontendcustom.js') }}"></script>
-
-
-
-
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+   
 </body>
 
 </html>

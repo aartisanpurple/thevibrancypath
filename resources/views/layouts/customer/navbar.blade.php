@@ -20,13 +20,16 @@
                <div class="nav-icons">
                    <a href="javascript:void(0)"><i class="ri-user-line"></i></a>
                    <a href="javascript:void(0)"><i class="ri-search-line"></i></a>
+                   @php
+                   $cart = json_decode(request()->cookie('cart'), true) ?? [];
+                   $cartCount = array_sum(array_column($cart, 'quantity'));
+                   @endphp
                    <a href="{{ route('customer.storecart') }}" class="position-relative">
                        <i class="ri-shopping-cart-line" style="font-size: 1.2rem;"></i>
-                       <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                       <span class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                            {{ $cartCount ?? 0 }}
                        </span>
                    </a>
-
                </div>
            </div>
        </div>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Customer\CartController;
 
 Route::get('/', [HomeController::class, 'index'])->name('customer.home');
 Route::get('/about', [HomeController::class, 'about'])->name('customer.about');
@@ -17,7 +18,6 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('customer.conta
 Route::get('/about', [HomeController::class, 'about'])->name('customer.about');
 Route::get('/blog', [HomeController::class, 'blog'])->name('customer.blog');
 Route::get('/blog-details/{id}', [HomeController::class, 'blogDetails'])->name('customer.blogDetails');
-Route::get('/coaching', [HomeController::class, 'coaching'])->name('customer.coaching');
 Route::get('/coaching-details', [HomeController::class, 'coachingDetails'])->name('customer.coachingDetails');
 Route::get('/products', [HomeController::class, 'products'])->name('customer.products');
 Route::get('/product-details', [HomeController::class, 'productDetails'])->name('customer.productDetails');
@@ -29,17 +29,29 @@ Route::get('/checkout', [HomeController::class, 'checkout'])->name('customer.che
 Route::get('/checkout-details', [HomeController::class, 'checkoutDetails'])->name('customer.checkoutDetails');
 Route::get('/faq', [HomeController::class, 'faq'])->name('customer.faq');
 Route::post('/contact', [HomeController::class, 'contactStore'])->name('customer.contact.store');
-Route::get('/privacy', [HomeController::class, 'privacy'])->name('customer.privacy');
-Route::get('/store', [HomeController::class, 'store'])->name('customer.store');
-Route::post('/store-api', [HomeController::class, 'storeApi'])->name('customer.store.api');
-Route::post('/update-cart', [HomeController::class, 'updateCart'])->name('customer.updatecart');
-Route::post('/remove-from-cart', [HomeController::class, 'removeFromCart'])->name('customer.removefromcart');
-Route::get('/store-search', [HomeController::class, 'search'])->name('customer.storesearch');
-Route::get('/store-details/{id}', [HomeController::class, 'storeDetails'])->name('customer.storeDetails');
-Route::get('/store-cart', [HomeController::class, 'storeCart'])->name('customer.storecart');
-Route::post('/store-savecart', [HomeController::class, 'storesavecart'])->name('customer.savecart');
-Route::get('/store-checkout', [HomeController::class, 'storeCheckout'])->name('customer.storecheckout');
-Route::post('/store-clear', [HomeController::class, 'clear'])->name('customer.clear');
+
+Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('customer.privacypolicy');
+Route::get('/coaching', [HomeController::class, 'coaching'])->name('customer.coaching');
+
+//Store cart 
+Route::get('/store', [CartController::class, 'store'])->name('customer.store');
+Route::get('/store-details/{id}', [CartController::class, 'storeDetails'])->name('customer.storeDetails');
+
+Route::post('/store-api', [CartController::class, 'storeApi'])->name('customer.store.api');
+
+Route::get('/store-cart', [CartController::class, 'storeCart'])->name('customer.storecart');
+Route::post('/store-savecart', [CartController::class, 'storesavecart'])->name('customer.savecart');
+
+Route::post('/update-cart', [CartController::class, 'updateCart'])->name('customer.updatecart');
+Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('customer.removefromcart');
+
+Route::get('/store-search', [CartController::class, 'search'])->name('customer.storesearch');
+
+Route::get('/store-checkoutview', [CartController::class, 'storeCheckoutview'])->name('customer.storecheckoutview');
+Route::post('/store-checkout', [CartController::class, 'storeCheckout'])->name('customer.storecheckout');
+
+Route::get('/store-success', [CartController::class, 'storesuccess'])->name('customer.storesuccess');
+Route::post('/store-clear', [CartController::class, 'clear'])->name('customer.clear');
 
 // Customer Authentication Routes
 Route::middleware('guest')->group(function () {
