@@ -9,7 +9,7 @@
       <div class="row justify-content-center text-center">
         <div class="col-lg-10">
           <h2>Store</h2>
-      
+
         </div>
       </div>
     </div>
@@ -37,10 +37,7 @@
                 </tr>
               </thead>
               <tbody id="cart-items">
-                @php
-                $subtotal = 0;
-                @endphp
-
+                @php $subtotal = 0; @endphp
                 @forelse ($cart as $item)
                 @php
                 $quantity = $item['quantity'] ?? 1;
@@ -48,28 +45,18 @@
                 $subtotal += $itemTotal;
                 @endphp
                 <tr id="cart-item-{{ $item['id'] }}">
-                  <td class="d-flex align-items-center gap-3">
-                    <span>{{ $item['name'] }}</span>
-                  </td>
+                  <td class="d-flex align-items-center gap-3"><span>{{ $item['name'] }}</span></td>
                   <td>${{ number_format($item['price'], 2) }}</td>
                   <td>
                     <div class="input-group" style="max-width: 100px;">
-                      <button class="btn btn-outline-secondary btn-sm update-quantity" 
-                              data-action="decrease" 
-                              data-id="{{ $item['id'] }}" 
-                              id="decrease-{{ $item['id'] }}">-</button>
+                      <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="decrease" data-id="{{ $item['id'] }}">-</button>
                       <input type="text" class="form-control text-center quantity" value="{{ $quantity }}" readonly>
-                      <button class="btn btn-outline-secondary btn-sm update-quantity" 
-                              data-action="increase" 
-                              data-id="{{ $item['id'] }}" 
-                              id="increase-{{ $item['id'] }}">+</button>
+                      <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="increase" data-id="{{ $item['id'] }}">+</button>
                     </div>
                   </td>
                   <td class="item-total">${{ number_format($itemTotal, 2) }}</td>
                   <td>
-                    <button class="btn btn-sm btn-link text-danger remove-item" id="removeitem"
-                            data-id="{{ $item['id'] }}" 
-                            id="remove-{{ $item['id'] }}">✕</button>
+                    <button class="btn btn-sm btn-link text-danger remove-item" data-id="{{ $item['id'] }}">✕</button>
                   </td>
                 </tr>
                 @empty
@@ -77,6 +64,7 @@
                   <td colspan="5" class="text-center text-muted">Your cart is empty.</td>
                 </tr>
                 @endforelse
+
               </tbody>
             </table>
 
@@ -87,7 +75,7 @@
                 <form action="{{ route('customer.clear') }}" method="POST">
                   @csrf
                   <button class="btn btn-outline-danger" type="submit">
-                    🗑️  
+                    🗑️
                   </button>
                 </form>
 
@@ -144,77 +132,75 @@
 
     </div>
   </div>
-</section> 
+</section>
 @endsection
-@push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function () {
-  // Update Quantity
-  $(document).on('click', '.update-quantity', function () {
-    let action = $(this).data('action'); // Get the action (increase or decrease)
-    let itemId = $(this).data('id'); // Get the item ID
-    let input = $(this).siblings('.quantity'); // Get the input field with the current quantity
-    let currentQty = parseInt(input.val()); // Get the current quantity
-    let newQty = action === 'increase' ? currentQty + 1 : Math.max(1, currentQty - 1); // Calculate new quantity
+  $(document).ready(function() {
+    // Update Quantity
+    $(document).on('click', '.update-quantity', function() {
+      let action = $(this).data('action'); // Get the action (increase or decrease)
+      let itemId = $(this).data('id'); // Get the item ID
+      let input = $(this).siblings('.quantity'); // Get the input field with the current quantity
+      let currentQty = parseInt(input.val()); // Get the current quantity
+      let newQty = action === 'increase' ? currentQty + 1 : Math.max(1, currentQty - 1); // Calculate new quantity
 
-    // Update input value (Visual change in UI)
-    input.val(newQty);
+      // Update input value (Visual change in UI)
+      input.val(newQty);
 
-    // Send the AJAX request to update the quantity
-    $.ajax({
-      url: "{{ route('customer.updatecart') }}", // Ensure the route is correct
-      method: 'POST',
-      data: {
-        _token: '{{ csrf_token() }}', // CSRF token for security
-        id: itemId, // Send the item ID
-        quantity: newQty // Send the new quantity
-      },
-      success: function (res) {
-        // Ensure the server returns the updated HTML and cart totals
-        if (res.success) {
-          // Update the cart HTML and totals
-          $('#cart-items').html(res.cartHtml);
-          $('#sub-total').text(res.subtotalFormatted);
-          $('#total').text(res.totalFormatted);
-        } else {
-          alert('Error updating cart');
+      // Send the AJAX request to update the quantity
+      $.ajax({
+        url: "{{ route('customer.updatecart') }}", // Ensure the route is correct
+        method: 'POST',
+        data: {
+          _token: '{{ csrf_token() }}', // CSRF token for security
+          id: itemId, // Send the item ID
+          quantity: newQty // Send the new quantity
+        },
+        success: function(res) {
+          // Ensure the server returns the updated HTML and cart totals
+          if (res.success) {
+            // Update the cart HTML and totals
+            $('#cart-items').html(res.cartHtml);
+            $('#sub-total').text(res.subtotalFormatted);
+            $('#total').text(res.totalFormatted);
+          } else {
+           // alert('Error updating cart');
+          }
+        },
+        error: function() {
+         // alert('Failed to update cart');
         }
-      },
-      error: function () {
-        alert('Failed to update cart');
-      }
+      });
+    });
+
+    // Remove Item
+    $(document).on('click', '.remove-item', function() {
+      let itemId = $(this).data('id'); // Get the item ID to remove
+
+      // Send the AJAX request to remove the item
+      $.ajax({
+        url: "{{ route('customer.removefromcart') }}", // Ensure the route is correct
+        method: 'POST',
+        data: {
+          _token: '{{ csrf_token() }}', // CSRF token for security
+          id: itemId // Send the item ID
+        },
+        success: function(res) {
+          // Ensure the server returns the updated HTML and cart totals
+          if (res.success) {
+            // Remove the item row from the cart visually
+            $('#cart-item-' + itemId).remove();
+            $('#sub-total').text(res.subtotalFormatted);
+            $('#total').text(res.totalFormatted);
+          } else {
+           // alert('Error removing item from cart');
+          }
+        },
+        error: function() {
+          //alert('Failed to remove item from cart');
+        }
+      });
     });
   });
-
-  // Remove Item
-  $(document).on('click', '.remove-item', function () {
-    let itemId = $(this).data('id'); // Get the item ID to remove
-
-    // Send the AJAX request to remove the item
-    $.ajax({
-      url: "{{ route('customer.removefromcart') }}", // Ensure the route is correct
-      method: 'POST',
-      data: {
-        _token: '{{ csrf_token() }}', // CSRF token for security
-        id: itemId // Send the item ID
-      },
-      success: function (res) {
-        // Ensure the server returns the updated HTML and cart totals
-        if (res.success) {
-          // Remove the item row from the cart visually
-          $('#cart-item-' + itemId).remove();
-          $('#sub-total').text(res.subtotalFormatted);
-          $('#total').text(res.totalFormatted);
-        } else {
-          alert('Error removing item from cart');
-        }
-      },
-      error: function () {
-        alert('Failed to remove item from cart');
-      }
-    });
-  });
-});
 </script>
-@endpush

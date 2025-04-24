@@ -113,24 +113,24 @@
 
 
                                     <button class="btn btn-primary px-4 add-to-cart"
-        data-id="{{ $product->id }}"
-        data-name="{{ $product->name }}"
-        data-price="{{ $product->price }}"
-        data-img="{{ $product->image }}">
-    Add to cart
-</button>
+                                        data-id="{{ $product->id }}"
+                                        data-name="{{ $product->name }}"
+                                        data-price="{{ $product->price }}"
+                                        data-img="{{ $product->image }}">
+                                        Add to cart
+                                    </button>
 
-<!-- Toast Message (Initially Hidden) -->
-<div id="cart-toast" class="position-fixed top-0 end-0 p-3" style="z-index: 1055; display: none;">
-    <div class="toast align-items-center text-bg-success border-0 show" role="alert">
-        <div class="d-flex">
-            <div class="toast-body">
-                Product added to cart!
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="$('#cart-toast').fadeOut();"></button>
-        </div>
-    </div>
-</div>
+                                    <!-- Toast Message (Initially Hidden) -->
+                                    <div id="cart-toast" class="position-fixed top-0 end-0 p-3" style="z-index: 1055; display: none;">
+                                        <div class="toast align-items-center text-bg-success border-0 show" role="alert">
+                                            <div class="d-flex">
+                                                <div class="toast-body">
+                                                    Product added to cart!
+                                                </div>
+                                                <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="$('#cart-toast').fadeOut();"></button>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -192,8 +192,8 @@
                     if (response.success) {
                         $('.cart-count').text(response.count);
                         // Show toast with message
-                    $('#cart-toast .toast-body').text('Product added to cart!');
-                    $('#cart-toast').fadeIn().delay(2000).fadeOut();
+                        $('#cart-toast .toast-body').text('Product added to cart!');
+                        $('#cart-toast').fadeIn().delay(2000).fadeOut();
                         // alert("Added to cart!");
                     }
                 },

@@ -52,54 +52,54 @@ class CartController extends Controller
     }
     public function storeApi(Request $request)
     {
-       // Handle AJAX Add to Cart
-    if ($request->ajax()) {
-        // Retrieve the cart from the cookies, if it exists, or create a new one
-        $cart = json_decode(Cookie::get('cart', '[]'), true);
+        // Handle AJAX Add to Cart
+        if ($request->ajax()) {
+            // Retrieve the cart from the cookies, if it exists, or create a new one
+            $cart = json_decode(Cookie::get('cart', '[]'), true);
 
-        // Get product details from the request
-        $productId = $request->input('product_id');
-        $productName = $request->input('product_name');
-        $productPrice = $request->input('product_price');
-        $quantity = $request->input('quantity', 1); // Default quantity is 1
+            // Get product details from the request
+            $productId = $request->input('product_id');
+            $productName = $request->input('product_name');
+            $productPrice = $request->input('product_price');
+            $quantity = $request->input('quantity', 1); // Default quantity is 1
 
-        // Check if the product already exists in the cart
-        $productExists = false;
-        foreach ($cart as &$item) {
-            if ($item['id'] == $productId) {
-                $item['quantity'] += $quantity; // Increase quantity if it exists
-                $productExists = true;
-                break;
+            // Check if the product already exists in the cart
+            $productExists = false;
+            foreach ($cart as &$item) {
+                if ($item['id'] == $productId) {
+                    $item['quantity'] += $quantity; // Increase quantity if it exists
+                    $productExists = true;
+                    break;
+                }
             }
+
+            // If not in cart, add as new item
+            if (!$productExists) {
+                $cart[] = [
+                    'id' => $productId,
+                    'name' => $productName,
+                    'price' => $productPrice,
+                    'quantity' => $quantity
+                ];
+            }
+
+            // Save cart back to cookies (for 1 day)
+            Cookie::queue('cart', json_encode($cart), 60 * 24);
+
+            // Calculate total item count in the cart
+            $count = array_sum(array_column($cart, 'quantity'));
+
+            // Return JSON response
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added to cart!',
+                'count' => $count
+            ]);
         }
 
-        // If not in cart, add as new item
-        if (!$productExists) {
-            $cart[] = [
-                'id' => $productId,
-                'name' => $productName,
-                'price' => $productPrice,
-                'quantity' => $quantity
-            ];
-        }
-
-        // Save cart back to cookies (for 1 day)
-        Cookie::queue('cart', json_encode($cart), 60 * 24);
-
-        // Calculate total item count in the cart
-        $count = array_sum(array_column($cart, 'quantity'));
-
-        // Return JSON response
-        return response()->json([
-            'success' => true,
-            'message' => 'Product added to cart!',
-            'count' => $count
-        ]);
-    }
-
-    // For normal (non-AJAX) requests, return the store view
-   // $products = Product::all();
-   // return view('store', compact('products'));
+        // For normal (non-AJAX) requests, return the store view
+        // $products = Product::all();
+        // return view('store', compact('products'));
 
     }
     public function storeCart()
@@ -143,57 +143,61 @@ class CartController extends Controller
 
         return redirect()->back()->with('success', 'Product added to cart!');
     }
-    public function updateCart(Request $request)
+
+    public function generateCartResponse($cart)
     {
-        $productId = $request->product_id;
-        $quantity = $request->quantity;
-
-        // Update cart logic here (e.g., using session or database)
-        $cart = session()->get('cart', []);
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] = $quantity;
-            session()->put('cart', $cart);
-        }
-
-        // Calculate updated cart values
-        $cartSubtotal = 0;
-        $cartTotal = 0;
+        $subtotal = 0;
         foreach ($cart as $item) {
-            $cartSubtotal += $item['price'] * $item['quantity'];
+            $subtotal += $item['price'] * ($item['quantity'] ?? 1);
         }
-        $cartTotal = $cartSubtotal; // For simplicity, no tax or shipping
+
+        $discount = 0;
+        $shipping = 0;
+        $tax = 0;
+        $total = $subtotal - $discount + $tax + $shipping;
+
+        // Render the cart items using a Blade partial
+        $cartHtml = view('partials.cart-items', ['cart' => $cart])->render();
 
         return response()->json([
             'success' => true,
-            'new_price' => $cart[$productId]['price'],
-            'cart_subtotal' => $cartSubtotal,
-            'cart_total' => $cartTotal
+            'cartHtml' => $cartHtml,
+            'subtotalFormatted' => '$' . number_format($subtotal, 2),
+            'totalFormatted' => '$' . number_format($total, 2),
         ]);
     }
+
+    public function updateCart(Request $request)
+    {
+        $id = $request->input('id');
+        $newQty = max(1, (int) $request->input('quantity'));
+
+        $cart = json_decode(Cookie::get('cart', '[]'), true);
+
+        foreach ($cart as &$item) {
+            if ($item['id'] == $id) {
+                $item['quantity'] = $newQty;
+                break;
+            }
+        }
+
+        Cookie::queue('cart', json_encode($cart), 60 * 24);
+
+        return $this->generateCartResponse($cart);
+    }
+
     public function removeFromCart(Request $request)
     {
-        $productId = $request->product_id;
+        $id = $request->input('id');
 
-        $cart = session()->get('cart', []);
-        if (isset($cart[$productId])) {
-            unset($cart[$productId]);
-            session()->put('cart', $cart);
-        }
+        $cart = json_decode(Cookie::get('cart', '[]'), true);
+        $cart = array_filter($cart, function ($item) use ($id) {
+            return $item['id'] != $id;
+        });
 
-        // Recalculate the cart totals
-        $cartSubtotal = 0;
-        $cartTotal = 0;
-        foreach ($cart as $item) {
-            $cartSubtotal += $item['price'] * $item['quantity'];
-        }
-        $cartTotal = $cartSubtotal; // For simplicity, no tax or shipping
+        Cookie::queue('cart', json_encode(array_values($cart)), 60 * 24);
 
-        return response()->json([
-            'success' => true,
-            'cart_subtotal' => $cartSubtotal,
-            'cart_total' => $cartTotal,
-            'cart_count' => count($cart)
-        ]);
+        return $this->generateCartResponse($cart);
     }
     public function search(Request $request)
     {
@@ -297,7 +301,7 @@ class CartController extends Controller
     {
         return view('store.store-success');
     }
-    
+
     public function clear()
     {
 
