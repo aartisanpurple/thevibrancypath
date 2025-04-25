@@ -18,7 +18,7 @@
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}" href="{{ route('customer.contact') }}">Contact</a></li>
                </ul>
                <div class="nav-icons">
-                   <a href="javascript:void(0)"><i class="ri-user-line"></i></a>
+                   <a href="{{ route('login') }}"><i class="ri-user-line"></i></a>
                    <a href="javascript:void(0)"><i class="ri-search-line"></i></a>
                    @php
                    $cart = json_decode(request()->cookie('cart'), true) ?? [];

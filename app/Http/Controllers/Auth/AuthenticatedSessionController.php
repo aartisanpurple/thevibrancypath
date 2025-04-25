@@ -88,6 +88,11 @@ class AuthenticatedSessionController extends Controller
         return view('auth.register'); // Ensure this Blade file exists
     }
 
+    public function showUserRegisterForm()
+    {
+        return view('auth.register'); // Ensure this Blade file exists
+    }
+    
     public function UserRegister(Request $request)
     {
         //dd($request->all());

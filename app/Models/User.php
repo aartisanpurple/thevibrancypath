@@ -19,9 +19,20 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name', 'user_name', 'mobile_no', 'email', 'password', 
-        'address', 'city', 'state', 'country', 'postal_code', 
-        'user_type', 'status', 'email_verified_at', 'deleted_at'
+        'name',
+        'user_name',
+        'mobile_no',
+        'email',
+        'password',
+        'address',
+        'city',
+        'state',
+        'country',
+        'postal_code',
+        'user_type',
+        'status',
+        'email_verified_at',
+        'deleted_at'
     ];
 
     /**
@@ -54,5 +65,14 @@ class User extends Authenticatable
     {
         return $this->user_type === 'admin';
     }
-    
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function primaryAddress()
+    {
+        return $this->hasOne(Address::class)->where('is_primary', true);
+    }
 }
