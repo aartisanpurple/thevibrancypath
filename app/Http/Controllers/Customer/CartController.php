@@ -8,11 +8,15 @@ use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\Contact;
 use App\Models\Testimonal;
+use App\Models\User;
+use App\Models\Address;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Orders;
 use App\Models\OrderItems;
+use Illuminate\Support\Str;
+
 
 class CartController extends Controller
 {
@@ -246,61 +250,145 @@ class CartController extends Controller
     }
     public function storeCheckout(Request $request)
     {
+        // // Retrieve the cart from cookies
+        // $cart = json_decode(Cookie::get('cart', '[]'), true);
+
+        // if (empty($cart)) {
+        //     return redirect()->back()->with('error', 'Your cart is empty.');
+        // }
+
+        // // Validate the request (you may need to modify the rules based on your needs)
+        // $request->validate([
+        //     'first_name' => 'required|string',
+        //     'phone' => 'required',
+        //     'email' => 'required|email',
+        //     'address1' => 'required',
+        //     'country' => 'required',
+        //     'state' => 'required',
+        //     'city' => 'required',
+        //     'zip_code' => 'required',
+        // ]);
+
+        // // Calculate total price of the cart
+        // $subTotal = 0;
+        // foreach ($cart as $item) {
+        //     $subTotal += $item['price'] * $item['quantity'];
+        // }
+
+        // $totalAmount = $subTotal; // Add shipping/tax if applicable
+
+        // // Store the order in the Orders table
+        // $order = Orders::create([
+        //     'user_id' => 1,
+        //     'total_amount' => $totalAmount,
+        //     'order_status' => 0, // e.g., 0 = pending
+        //     'payment_status' => 0, // e.g., 0 = unpaid
+        //     'payment_method' => 1, // Payment method (can be modified)
+        //     'payment_id' => null, // This could be populated if using a payment gateway
+        // ]);
+
+        // // Save the order items in the OrderItems table
+        // foreach ($cart as $item) {
+        //     OrderItems::create([
+        //         'order_id' => $order->id,
+        //         'category_id' => $item['category_id'] ?? 1, // Handle category if provided
+        //         'subcategory_id' => $item['subcategory_id'] ?? 1, // Handle subcategory if provided
+        //         'product_id' => $item['id'],
+        //         'quantity' => $item['quantity'],
+        //         'price' => $item['price'],
+        //         'total_price' => $item['price'] * $item['quantity'],
+        //     ]);
+        // }
+
+        // // Clear the cart (if you want to clear it after the order is placed)
+        // Cookie::queue(Cookie::forget('cart'));
+
+        // // Optionally, redirect to a "thank you" or "order confirmation" page
+        // return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
+
         // Retrieve the cart from cookies
-        $cart = json_decode(Cookie::get('cart', '[]'), true);
+    $cart = json_decode(Cookie::get('cart', '[]'), true);
 
-        if (empty($cart)) {
-            return redirect()->back()->with('error', 'Your cart is empty.');
-        }
+    if (empty($cart)) {
+        return redirect()->back()->with('error', 'Your cart is empty.');
+    }
 
-        // Validate the request (you may need to modify the rules based on your needs)
-        $request->validate([
-            'first_name' => 'required|string',
-            'phone' => 'required',
-            'email' => 'required|email',
-            'address1' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'zip_code' => 'required',
+    // Validate request
+    $request->validate([
+        'first_name' => 'required|string',
+        'phone' => 'required',
+        'email' => 'required|email',
+        'address1' => 'required',
+        'country' => 'required',
+        'state' => 'required',
+        'city' => 'required',
+        'zip_code' => 'required',
+    ]);
+
+    // Check if user exists by email or create a new one
+    $user = User::firstOrCreate(
+        ['email' => $request->email],
+        [
+            'name' => $request->first_name,
+            'user_name' => strtolower(Str::slug($request->first_name . '-' . uniqid())), // generate unique username
+            'mobile_no' => $request->phone,
+            'email' => $request->email,
+            'user_type' => 'customer', // Adjust based on your logic
+            'status' => 1,
+            // Add password or leave null, depending on your app logic
+            'password' => bcrypt('password123'), // Or generate random
+        ]
+    );
+
+    // Create or update primary address
+    $address = Address::updateOrCreate(
+        ['user_id' => $user->id, 'is_primary' => true],
+        [
+            'address' => $request->address1,
+            'city' => $request->city,
+            'state' => $request->state,
+            'country' => $request->country,
+            'postal_code' => $request->zip_code,
+            'is_primary' => true
+        ]
+    );
+
+    // Calculate total price of the cart
+    $subTotal = 0;
+    foreach ($cart as $item) {
+        $subTotal += $item['price'] * $item['quantity'];
+    }
+
+    $totalAmount = $subTotal;
+
+    // Store the order
+    $order = Orders::create([
+        'user_id' => $user->id,
+        'total_amount' => $totalAmount,
+        'order_status' => 0,
+        'payment_status' => 0,
+        'payment_method' => 1,
+        'payment_id' => null,
+    ]);
+
+    // Save order items
+    foreach ($cart as $item) {
+        OrderItems::create([
+            'order_id' => $order->id,
+            'category_id' => $item['category_id'] ?? 1,
+            'subcategory_id' => $item['subcategory_id'] ?? 1,
+            'product_id' => $item['id'],
+            'quantity' => $item['quantity'],
+            'price' => $item['price'],
+            'total_price' => $item['price'] * $item['quantity'],
         ]);
+    }
 
-        // Calculate total price of the cart
-        $subTotal = 0;
-        foreach ($cart as $item) {
-            $subTotal += $item['price'] * $item['quantity'];
-        }
+    // Clear the cart
+    Cookie::queue(Cookie::forget('cart'));
 
-        $totalAmount = $subTotal; // Add shipping/tax if applicable
+    return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
 
-        // Store the order in the Orders table
-        $order = Orders::create([
-            'user_id' => 1,
-            'total_amount' => $totalAmount,
-            'order_status' => 0, // e.g., 0 = pending
-            'payment_status' => 0, // e.g., 0 = unpaid
-            'payment_method' => 1, // Payment method (can be modified)
-            'payment_id' => null, // This could be populated if using a payment gateway
-        ]);
-
-        // Save the order items in the OrderItems table
-        foreach ($cart as $item) {
-            OrderItems::create([
-                'order_id' => $order->id,
-                'category_id' => $item['category_id'] ?? 1, // Handle category if provided
-                'subcategory_id' => $item['subcategory_id'] ?? 1, // Handle subcategory if provided
-                'product_id' => $item['id'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-                'total_price' => $item['price'] * $item['quantity'],
-            ]);
-        }
-
-        // Clear the cart (if you want to clear it after the order is placed)
-        Cookie::queue(Cookie::forget('cart'));
-
-        // Optionally, redirect to a "thank you" or "order confirmation" page
-        return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
     }
     public function storesuccess()
     {

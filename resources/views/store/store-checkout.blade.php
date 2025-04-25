@@ -20,7 +20,7 @@ $cart = json_decode(request()->cookie('cart', '[]'), true);
 
 $subtotal = 0;
 foreach ($cart as $item) {
-$subtotal += $item['price'] * $item['quantity'];
+  $subtotal += $item['price'] * $item['quantity'];
 }
 
 $discount = 0; // Example: apply coupon logic if needed
@@ -41,17 +41,105 @@ $total = $subtotal - $discount + $tax;
           <div class="alert alert-danger">{{ session('error') }}</div>
           @endif
 
-          @guest
-          <div class="mb-3">
-            <p>Already have an account?
-              <a href="{{ route('login') }}" class="text-primary">Log in here</a>.
-            </p>
-          </div>
-
-
           <form action="{{ route('customer.storecheckout') }}" method="POST">
             @csrf
-            <div class="row g-3">
+
+            @guest
+            <div class="mb-3">
+              <p class="mt-3">Already have an account? <a href="{{ route('login') }}">Log in here</a></p>
+            </div>
+            @endguest
+
+            @auth
+            <div class="mb-3">
+              <p>👋 Welcome back, <strong>{{ Auth::user()->name ?? 'User' }}</strong>!</p>
+            </div>
+
+            @if ($addresses = Auth::user()->addresses ?? null)
+            <div class="mb-3">
+              <label class="form-label d-block">Choose a saved address:</label>
+              @foreach ($addresses as $address)
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="selected_address_id" id="address_{{ $address->id }}" value="{{ $address->id }}">
+                <label class="form-check-label" for="address_{{ $address->id }}">
+                  {{ $address->address1 }}, {{ $address->city }}, {{ $address->state }} - {{ $address->zip_code }}
+                </label>
+              </div>
+              @endforeach
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="selected_address_id" id="new_address" value="new">
+                <label class="form-check-label" for="new_address">
+                  ➕ Add New Address
+                </label>
+              </div>
+            </div>
+            @endif
+            @endauth
+
+            <!-- New Address Fields -->
+            <div id="new-address-fields" style="display: none;">
+              <p class="fw-bold">Enter New Address:</p>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">First name *</label>
+                  <input type="text" name="first_name" class="form-control" placeholder="First name">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Last name</label>
+                  <input type="text" name="last_name" class="form-control" placeholder="Last name">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone *</label>
+                  <input type="tel" name="phone" class="form-control">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email *</label>
+                  <input type="email" name="email" class="form-control" placeholder="example@gmail.com">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Address 1 *</label>
+                  <input type="text" name="address1" class="form-control" placeholder="Enter address">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Address 2</label>
+                  <input type="text" name="address2" class="form-control" placeholder="Enter address">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Country *</label>
+                  <select class="form-select" name="country">
+                    <option value="">Select...</option>
+                    <option value="India">India</option>
+                    <option value="USA">USA</option>
+                    <option value="UK">UK</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">State *</label>
+                  <select class="form-select" name="state">
+                    <option value="">Select...</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">City *</label>
+                  <select class="form-select" name="city">
+                    <option value="">Select...</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">ZIP/Postal Code *</label>
+                  <input type="text" name="zip_code" class="form-control">
+                </div>
+              </div>
+            </div>
+
+            @guest
+            <!-- Show full form to guests -->
+            <div class="row g-3 mt-3">
               <div class="col-md-6">
                 <label class="form-label">First name *</label>
                 <input type="text" name="first_name" class="form-control" placeholder="First name" required>
@@ -106,6 +194,7 @@ $total = $subtotal - $discount + $tax;
                 <input type="text" name="zip_code" class="form-control" required>
               </div>
             </div>
+            @endguest
 
             <!-- Cart Summary as Hidden Fields -->
             <input type="hidden" name="subtotal" value="{{ $subtotal }}">
@@ -117,35 +206,6 @@ $total = $subtotal - $discount + $tax;
               <button type="submit" class="btn btn-primary w-100">Place Order →</button>
             </div>
           </form>
-
-          @endguest
-
-          @auth
-          <div class="mb-3">
-            <p>👋 Welcome back, <strong>{{ Auth::user()->name ?? 'User' }}</strong>!</p>
-          </div>
-
-          @if ($addresses = Auth::user()->addresses ?? null)
-          <div class="mb-3">
-            <label class="form-label">Choose a saved address:</label>
-            <select class="form-select" name="selected_address_id" id="address-selector">
-              <option value="">-- Select an address --</option>
-              @foreach ($addresses as $address)
-              <option value="{{ $address->id }}">
-                {{ $address->address1 }}, {{ $address->city }}, {{ $address->state }} - {{ $address->zip_code }}
-              </option>
-              @endforeach
-              <option value="new">➕ Add New Address</option>
-            </select>
-          </div>
-          @endif
-
-          <div id="new-address-fields" style="display: none;">
-            <p class="fw-bold">Enter New Address:</p>
-            @endif
-            @auth
-          </div> <!-- end #new-address-fields -->
-          @endauth
         </div>
       </div>
 
@@ -182,3 +242,25 @@ $total = $subtotal - $discount + $tax;
   </div>
 </section>
 @endsection
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const radios = document.querySelectorAll('input[name="selected_address_id"]');
+    const newAddressFields = document.getElementById('new-address-fields');
+
+    radios.forEach(radio => {
+      radio.addEventListener('change', function () {
+        if (this.value === 'new') {
+          newAddressFields.style.display = 'block';
+        } else {
+          newAddressFields.style.display = 'none';
+        }
+      });
+
+      // Show if pre-selected
+      if (radio.checked && radio.value === 'new') {
+        newAddressFields.style.display = 'block';
+      }
+    });
+  });
+</script>
+
