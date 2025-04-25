@@ -53,6 +53,8 @@ Route::post('/store-checkout', [CartController::class, 'storeCheckout'])->name('
 Route::get('/store-success', [CartController::class, 'storesuccess'])->name('customer.storesuccess');
 Route::post('/store-clear', [CartController::class, 'clear'])->name('customer.clear');
 
+Route::get('/store-invoice/{orderId}', [CartController::class, 'storeinvoice'])->name('customer.storeinvoice');
+
 // Customer Authentication Routes
 Route::middleware('guest')->group(function () {
     // Login Routes

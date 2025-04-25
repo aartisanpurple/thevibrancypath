@@ -32,7 +32,7 @@
                   <th>Products</th>
                   <th>Price</th>
                   <th>Quantity</th>
-                  <th>Total</th>
+                
                   <th></th>
                 </tr>
               </thead>
@@ -54,7 +54,7 @@
                       <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="increase" data-id="{{ $item['id'] }}">+</button>
                     </div>
                   </td>
-                  <td class="item-total">${{ number_format($itemTotal, 2) }}</td>
+                
                   <td>
                     <button class="btn btn-sm btn-link text-danger remove-item" data-id="{{ $item['id'] }}">✕</button>
                   </td>
@@ -78,11 +78,11 @@
                     🗑️
                   </button>
                 </form>
-
+                <!-- 
                 <div class="input-group" style="max-width: 300px;">
                   <input type="text" class="form-control" placeholder="Coupon Code">
                   <button class="btn btn-secondary">Apply</button>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

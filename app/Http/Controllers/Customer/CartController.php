@@ -313,4 +313,16 @@ class CartController extends Controller
         Cookie::queue(Cookie::forget('cart'));
         return redirect()->back()->with('success', 'Cart has been cleared.');
     }
+
+    public function storeinvoice($orderId)
+    {
+        // Fetch order and related items with relationships needed for details invoice with customer module completed
+        $order = Orders::findOrFail($orderId);
+        $orderItems = OrderItems::where('order_id', $orderId)->get();
+
+        return view('store.invoice', [
+            'order' => $order,
+            'orderItems' => $orderItems
+        ]);
+    }
 }
