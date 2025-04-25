@@ -41,6 +41,14 @@ $total = $subtotal - $discount + $tax;
           <div class="alert alert-danger">{{ session('error') }}</div>
           @endif
 
+          @guest
+          <div class="mb-3">
+            <p>Already have an account?
+              <a href="{{ route('login') }}" class="text-primary">Log in here</a>.
+            </p>
+          </div>
+
+
           <form action="{{ route('customer.storecheckout') }}" method="POST">
             @csrf
             <div class="row g-3">
@@ -109,6 +117,35 @@ $total = $subtotal - $discount + $tax;
               <button type="submit" class="btn btn-primary w-100">Place Order →</button>
             </div>
           </form>
+
+          @endguest
+
+          @auth
+          <div class="mb-3">
+            <p>👋 Welcome back, <strong>{{ Auth::user()->name ?? 'User' }}</strong>!</p>
+          </div>
+
+          @if ($addresses = Auth::user()->addresses ?? null)
+          <div class="mb-3">
+            <label class="form-label">Choose a saved address:</label>
+            <select class="form-select" name="selected_address_id" id="address-selector">
+              <option value="">-- Select an address --</option>
+              @foreach ($addresses as $address)
+              <option value="{{ $address->id }}">
+                {{ $address->address1 }}, {{ $address->city }}, {{ $address->state }} - {{ $address->zip_code }}
+              </option>
+              @endforeach
+              <option value="new">➕ Add New Address</option>
+            </select>
+          </div>
+          @endif
+
+          <div id="new-address-fields" style="display: none;">
+            <p class="fw-bold">Enter New Address:</p>
+            @endif
+            @auth
+          </div> <!-- end #new-address-fields -->
+          @endauth
         </div>
       </div>
 
