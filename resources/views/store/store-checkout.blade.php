@@ -52,7 +52,7 @@ $total = $subtotal - $discount + $tax;
 
             @auth
             <div class="mb-3">
-              <p>👋 Welcome back, <strong>{{ Auth::user()->name ?? 'User' }}</strong>!</p>
+              <p> Welcome back, <strong>{{ Auth::user()->name ?? 'User' }}</strong>!</p>
             </div>
 
             @if ($addresses = Auth::user()->addresses ?? null)
@@ -62,7 +62,7 @@ $total = $subtotal - $discount + $tax;
               <div class="form-check mb-2">
                 <input class="form-check-input" type="radio" name="selected_address_id" id="address_{{ $address->id }}" value="{{ $address->id }}">
                 <label class="form-check-label" for="address_{{ $address->id }}">
-                  {{ $address->address1 }}, {{ $address->city }}, {{ $address->state }} - {{ $address->zip_code }}
+                  {{ $address->address }}, {{ $address->city }}, {{ $address->state }} - {{ $address->postal_code }}
                 </label>
               </div>
               @endforeach
@@ -70,7 +70,7 @@ $total = $subtotal - $discount + $tax;
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="selected_address_id" id="new_address" value="new">
                 <label class="form-check-label" for="new_address">
-                  ➕ Add New Address
+                   Add New Address
                 </label>
               </div>
             </div>
