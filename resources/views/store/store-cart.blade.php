@@ -70,7 +70,7 @@
 
             <!-- Bottom Buttons -->
             <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
-              <a href="#" class="btn btn-outline-primary">← Continue Shopping</a>
+              <a href="{{ route('customer.store') }}" class="btn btn-outline-primary">← Continue Shopping</a>
               <div class="d-flex gap-2 align-items-center">
                 <form action="{{ route('customer.clear') }}" method="POST">
                   @csrf

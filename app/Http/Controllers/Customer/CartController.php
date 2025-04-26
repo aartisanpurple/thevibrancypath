@@ -242,7 +242,7 @@ class CartController extends Controller
         $products = $query->latest('products.created_at')->paginate(6);
         $categories = Category::with('subcategories')->get();
 
-        return view('auth.store', compact('products', 'categories'));
+        return view('store.store', compact('products', 'categories'));
     }
     public function storeCheckoutview()
     {
@@ -307,88 +307,87 @@ class CartController extends Controller
         // return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
 
         // Retrieve the cart from cookies
-    $cart = json_decode(Cookie::get('cart', '[]'), true);
+        $cart = json_decode(Cookie::get('cart', '[]'), true);
 
-    if (empty($cart)) {
-        return redirect()->back()->with('error', 'Your cart is empty.');
-    }
+        if (empty($cart)) {
+            return redirect()->back()->with('error', 'Your cart is empty.');
+        }
 
-    // Validate request
-    $request->validate([
-        'first_name' => 'required|string',
-        'phone' => 'required',
-        'email' => 'required|email',
-        'address1' => 'required',
-        'country' => 'required',
-        'state' => 'required',
-        'city' => 'required',
-        'zip_code' => 'required',
-    ]);
-
-    // Check if user exists by email or create a new one
-    $user = User::firstOrCreate(
-        ['email' => $request->email],
-        [
-            'name' => $request->first_name,
-            'user_name' => strtolower(Str::slug($request->first_name . '-' . uniqid())), // generate unique username
-            'mobile_no' => $request->phone,
-            'email' => $request->email,
-            'user_type' => 'customer', // Adjust based on your logic
-            'status' => 1,
-            // Add password or leave null, depending on your app logic
-            'password' => bcrypt('password123'), // Or generate random
-        ]
-    );
-
-    // Create or update primary address
-    $address = Address::updateOrCreate(
-        ['user_id' => $user->id, 'is_primary' => true],
-        [
-            'address' => $request->address1,
-            'city' => $request->city,
-            'state' => $request->state,
-            'country' => $request->country,
-            'postal_code' => $request->zip_code,
-            'is_primary' => true
-        ]
-    );
-
-    // Calculate total price of the cart
-    $subTotal = 0;
-    foreach ($cart as $item) {
-        $subTotal += $item['price'] * $item['quantity'];
-    }
-
-    $totalAmount = $subTotal;
-
-    // Store the order
-    $order = Orders::create([
-        'user_id' => $user->id,
-        'total_amount' => $totalAmount,
-        'order_status' => 0,
-        'payment_status' => 0,
-        'payment_method' => 1,
-        'payment_id' => null,
-    ]);
-
-    // Save order items
-    foreach ($cart as $item) {
-        OrderItems::create([
-            'order_id' => $order->id,
-            'category_id' => $item['category_id'] ?? 1,
-            'subcategory_id' => $item['subcategory_id'] ?? 1,
-            'product_id' => $item['id'],
-            'quantity' => $item['quantity'],
-            'price' => $item['price'],
-            'total_price' => $item['price'] * $item['quantity'],
+        // Validate request
+        $request->validate([
+            'first_name' => 'required|string',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'address1' => 'required',
+            'country' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'zip_code' => 'required',
         ]);
-    }
 
-    // Clear the cart
-    Cookie::queue(Cookie::forget('cart'));
+        // Check if user exists by email or create a new one
+        $user = User::firstOrCreate(
+            ['email' => $request->email],
+            [
+                'name' => $request->first_name,
+                'user_name' => strtolower(Str::slug($request->first_name . '-' . uniqid())), // generate unique username
+                'mobile_no' => $request->phone,
+                'email' => $request->email,
+                'user_type' => 'customer', // Adjust based on your logic
+                'status' => 1,
+                // Add password or leave null, depending on your app logic
+                'password' => bcrypt('password123'), // Or generate random
+            ]
+        );
 
-    return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
+        // Create or update primary address
+        $address = Address::updateOrCreate(
+            ['user_id' => $user->id, 'is_primary' => true],
+            [
+                'address' => $request->address1,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country,
+                'postal_code' => $request->zip_code,
+                'is_primary' => true
+            ]
+        );
 
+        // Calculate total price of the cart
+        $subTotal = 0;
+        foreach ($cart as $item) {
+            $subTotal += $item['price'] * $item['quantity'];
+        }
+
+        $totalAmount = $subTotal;
+
+        // Store the order
+        $order = Orders::create([
+            'user_id' => $user->id,
+            'total_amount' => $totalAmount,
+            'order_status' => 0,
+            'payment_status' => 0,
+            'payment_method' => 1,
+            'payment_id' => null,
+        ]);
+
+        // Save order items
+        foreach ($cart as $item) {
+            OrderItems::create([
+                'order_id' => $order->id,
+                'category_id' => $item['category_id'] ?? 1,
+                'subcategory_id' => $item['subcategory_id'] ?? 1,
+                'product_id' => $item['id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+                'total_price' => $item['price'] * $item['quantity'],
+            ]);
+        }
+
+        // Clear the cart
+        Cookie::queue(Cookie::forget('cart'));
+
+        return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
     }
     public function storesuccess()
     {

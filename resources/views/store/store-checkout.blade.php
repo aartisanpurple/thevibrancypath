@@ -51,13 +51,13 @@ $total = $subtotal - $discount + $tax;
             @endguest
 
             @auth
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <p> Welcome back, <strong>{{ Auth::user()->name ?? 'User' }}</strong>!</p>
-            </div>
+            </div> -->
 
             @if ($addresses = Auth::user()->addresses ?? null)
             <div class="mb-3">
-              <label class="form-label d-block">Choose a saved address:</label>
+              <!-- <label class="form-label d-block">Choose a saved address:</label> -->
               @foreach ($addresses as $address)
               <div class="form-check mb-2">
                 <input class="form-check-input" type="radio" name="selected_address_id" id="address_{{ $address->id }}" value="{{ $address->id }}">

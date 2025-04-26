@@ -55,6 +55,7 @@ Route::post('/store-clear', [CartController::class, 'clear'])->name('customer.cl
 
 Route::get('/store-invoice/{orderId}', [CartController::class, 'storeinvoice'])->name('customer.storeinvoice');
 
+
 // Customer Authentication Routes
 Route::middleware('guest')->group(function () {
     // Login Routes
@@ -75,7 +76,9 @@ Route::middleware('guest')->group(function () {
 // Protected Customer Routes
 Route::middleware(['auth', 'check.usertype:customer'])->prefix('customer')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('customer.dashboard');
-    Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders');
-    Route::get('/profile', [ProfileController::class, 'show'])->name('customer.profile');
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('customer.logout');
+    Route::get('/myorder', [DashboardController::class, 'myorder'])->name('customer.myorder');
+    Route::get('/myprofile', [DashboardController::class, 'myprofile'])->name('customer.myprofile');
+    // Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders');
+    // Route::get('/profile', [ProfileController::class, 'show'])->name('customer.profile');
+     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('customer.logout');
 });

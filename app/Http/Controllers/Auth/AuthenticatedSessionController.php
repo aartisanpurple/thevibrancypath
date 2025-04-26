@@ -17,11 +17,15 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
+        // if (Auth::check() && Auth::user()->usertype === 'customer') {
+        //     return redirect()->to(route('customer.dashboard', absolute: false));
+        // }
+    
         return view('auth.login');
     }
-
+    
     /**
      * Handle an incoming authentication request.
      */
@@ -90,9 +94,9 @@ class AuthenticatedSessionController extends Controller
 
     public function showUserRegisterForm()
     {
-        return view('auth.register'); // Ensure this Blade file exists
+        return view('auth.register'); 
     }
-    
+
     public function UserRegister(Request $request)
     {
         //dd($request->all());
