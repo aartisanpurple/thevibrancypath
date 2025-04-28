@@ -396,6 +396,21 @@ class CartController extends Controller
         // Clear the cart
         Cookie::queue(Cookie::forget('cart'));
 
+        //         // When new user registers
+        // $affiliate = Affiliate::where('code', $referralCode)->first();
+        // if ($affiliate) {
+        //     // You can store somewhere that this user was referred by $affiliate->id
+        // }
+
+        // // When order is placed
+        // AffiliateCommission::create([
+        //     'affiliate_id' => $affiliate->id,
+        //     'referred_user_id' => $newUserId,
+        //     'order_id' => $orderId,
+        //     'amount' => $commissionAmount,
+        //     'paid' => false,
+        // ]);
+
         return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
     }
     public function storesuccess()
@@ -424,55 +439,54 @@ class CartController extends Controller
     }
     public function applyCoupon(Request $request)
     {
-     
-            $code = strtoupper(trim($request->input('coupon_code')));
-    
-           //Get cart from cookie (fallback to empty array)
-            $cart = json_decode(Cookie::get('cart', '[]'), true);
-            $subtotal = 0;
-    
-            foreach ($cart as $item) {
-                $quantity = $item['quantity'] ?? 1;
-                $subtotal += $item['price'] * $quantity;
-            }
-    
-            //Find coupon
-            $coupon = Coupon::whereCode($code)->first();
 
-    
-            if (!$coupon) {
-                // return response()->json([
-                //     'success' => false,
-                //     'message' => 'Invalid coupon code.'
-                // ]);
-                return redirect()->back()->with('error', 'Invalid coupon code.');
-            }
-    
-           // Calculate discount
-            if ($coupon->type === 'percentage') {
-                $discount = $subtotal * ($coupon->value / 100);
-            } else {
-                $discount = min($coupon->value, $subtotal);
-            }
-    
-            //Save the coupon to a cookie (so it stays for checkout later)
-            Cookie::queue('coupon', json_encode([
-                'code' => $coupon->code,
-                'discount' => $discount
-            ]), 60 * 24); // 1 day
-    
-            $total = $subtotal - $discount;
-            $subtotal=0;
-            $discount=0;
-            $total=0;
+        $code = strtoupper(trim($request->input('coupon_code')));
+
+        //Get cart from cookie (fallback to empty array)
+        $cart = json_decode(Cookie::get('cart', '[]'), true);
+        $subtotal = 0;
+
+        foreach ($cart as $item) {
+            $quantity = $item['quantity'] ?? 1;
+            $subtotal += $item['price'] * $quantity;
+        }
+
+        //Find coupon
+        $coupon = Coupon::whereCode($code)->first();
+
+
+        if (!$coupon) {
             // return response()->json([
-            //     'success' => true,
-            //     'message' => 'Coupon applied successfully!',
-            //     'subtotalFormatted' => '$' . number_format($subtotal, 2),
-            //     'discountFormatted' => '$' . number_format($discount, 2),
-            //     'totalFormatted' => '$' . number_format($total, 2)
+            //     'success' => false,
+            //     'message' => 'Invalid coupon code.'
             // ]);
-            return redirect()->back()->with('success', 'Coupon applied successfully!');
-       
+            return redirect()->back()->with('error', 'Invalid coupon code.');
+        }
+
+        // Calculate discount
+        if ($coupon->type === 'percentage') {
+            $discount = $subtotal * ($coupon->value / 100);
+        } else {
+            $discount = min($coupon->value, $subtotal);
+        }
+
+        //Save the coupon to a cookie (so it stays for checkout later)
+        Cookie::queue('coupon', json_encode([
+            'code' => $coupon->code,
+            'discount' => $discount
+        ]), 60 * 24); // 1 day
+
+        $total = $subtotal - $discount;
+        $subtotal = 0;
+        $discount = 0;
+        $total = 0;
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Coupon applied successfully!',
+        //     'subtotalFormatted' => '$' . number_format($subtotal, 2),
+        //     'discountFormatted' => '$' . number_format($discount, 2),
+        //     'totalFormatted' => '$' . number_format($total, 2)
+        // ]);
+        return redirect()->back()->with('success', 'Coupon applied successfully!');
     }
 }

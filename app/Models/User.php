@@ -75,4 +75,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Address::class)->where('is_primary', true);
     }
+    public function affiliate()
+    {
+        return $this->hasOne(Affiliate::class);
+    }
+    
+    // public function referredCommissions()
+    // {
+    //     return $this->hasMany(AffiliateCommission::class, 'referred_user_id');
+    // }
+    
+
 }
