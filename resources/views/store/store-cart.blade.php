@@ -16,6 +16,21 @@
   </div>
   <h4 class="text-center mt-3">Welcome to The Vibrancy Path.</h4>
 </section>
+@if (session('success'))
+<div class="container d-flex justify-content-center mt-3">
+  <div class="alert alert-success text-center w-50">
+    {{ session('success') }}
+  </div>
+</div>
+@endif
+@if(session('error'))
+<div class="container d-flex justify-content-center mt-3">
+  <div class="alert alert-danger text-center w-50">
+
+    {{ session('error') }}
+  </div>
+</div>
+@endif
 <section class="py-5" style="background-color: #faf7f3;">
   <div class="container">
     <div class="row g-4">
@@ -32,20 +47,38 @@
                   <th>Products</th>
                   <th>Price</th>
                   <th>Quantity</th>
-                
                   <th></th>
                 </tr>
               </thead>
               <tbody id="cart-items">
-                @php $subtotal = 0; @endphp
-                @forelse ($cart as $item)
                 @php
+                $subtotal = 0;
+                $discount = 0.00;
+                $shipping = 0.00;
+                $tax = 0.00;
+
+                // Read applied coupon from cookie (if exists)
+                $coupon = json_decode(Cookie::get('coupon', '{}'), true);
+
+                foreach ($cart as $item) {
                 $quantity = $item['quantity'] ?? 1;
                 $itemTotal = $item['price'] * $quantity;
                 $subtotal += $itemTotal;
+                }
+
+                if (isset($coupon['discount'])) {
+                $discount = $coupon['discount'];
+                }
+
+                $total = $subtotal - $discount + $tax + $shipping;
                 @endphp
+
+                @forelse ($cart as $item)
+                @php $quantity = $item['quantity'] ?? 1; @endphp
                 <tr id="cart-item-{{ $item['id'] }}">
-                  <td class="d-flex align-items-center gap-3"><span>{{ $item['name'] }}</span></td>
+                  <td class="d-flex align-items-center gap-3">
+                    <span>{{ $item['name'] }}</span>
+                  </td>
                   <td>${{ number_format($item['price'], 2) }}</td>
                   <td>
                     <div class="input-group" style="max-width: 100px;">
@@ -54,7 +87,6 @@
                       <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="increase" data-id="{{ $item['id'] }}">+</button>
                     </div>
                   </td>
-                
                   <td>
                     <button class="btn btn-sm btn-link text-danger remove-item" data-id="{{ $item['id'] }}">✕</button>
                   </td>
@@ -64,7 +96,6 @@
                   <td colspan="5" class="text-center text-muted">Your cart is empty.</td>
                 </tr>
                 @endforelse
-
               </tbody>
             </table>
 
@@ -78,11 +109,13 @@
                     🗑️
                   </button>
                 </form>
-                <!-- 
                 <div class="input-group" style="max-width: 300px;">
-                  <input type="text" class="form-control" placeholder="Coupon Code">
-                  <button class="btn btn-secondary">Apply</button>
-                </div> -->
+                  <form action="{{ route('customer.storeapplycoupon') }}" method="POST" class="d-flex gap-2">
+                    @csrf
+                    <input type="text" name="coupon_code" class="form-control" placeholder="Coupon Code" required>
+                    <button class="btn btn-secondary">Apply</button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -90,13 +123,6 @@
       </div>
 
       <!-- Cart Total -->
-      @php
-      $shipping = 0.00; // Free shipping
-      $discount = 0.00; // Apply coupon logic if needed
-      $tax = 0.00; // Optional tax logic
-      $total = $subtotal - $discount + $tax + $shipping;
-      @endphp
-
       <div class="col-lg-4">
         <div class="card">
           <div class="card-body">
@@ -123,13 +149,17 @@
                 <strong id="total">${{ number_format($total, 2) }}</strong>
               </li>
             </ul>
+
+            @if(count($cart) > 0)
             <a href="{{ route('customer.storecheckoutview') }}">
               <button class="btn btn-primary w-100">Proceed to Checkout →</button>
             </a>
+            @else
+            <button class="btn btn-primary w-100" disabled>Proceed to Checkout →</button>
+            @endif
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>

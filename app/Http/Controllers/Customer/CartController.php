@@ -15,6 +15,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Orders;
 use App\Models\OrderItems;
+use App\Models\Coupon;
 use Illuminate\Support\Str;
 
 
@@ -238,7 +239,15 @@ class CartController extends Controller
         if ($request->filled('subcategory_id')) {
             $query->where('subcategory.id', $request->subcategory_id);
         }
-
+        // Sorting logic
+        if ($request->sort == 'low_to_high') {
+            $query->orderBy('price', 'asc');
+        } elseif ($request->sort == 'high_to_low') {
+            $query->orderBy('price', 'desc');
+        } else {
+            // "Most Popular" — just random for now
+            $query->inRandomOrder();
+        }
         $products = $query->latest('products.created_at')->paginate(6);
         $categories = Category::with('subcategories')->get();
 
@@ -398,6 +407,7 @@ class CartController extends Controller
     {
 
         Cookie::queue(Cookie::forget('cart'));
+        Cookie::queue(Cookie::forget('coupon'));
         return redirect()->back()->with('success', 'Cart has been cleared.');
     }
 
@@ -411,5 +421,58 @@ class CartController extends Controller
             'order' => $order,
             'orderItems' => $orderItems
         ]);
+    }
+    public function applyCoupon(Request $request)
+    {
+     
+            $code = strtoupper(trim($request->input('coupon_code')));
+    
+           //Get cart from cookie (fallback to empty array)
+            $cart = json_decode(Cookie::get('cart', '[]'), true);
+            $subtotal = 0;
+    
+            foreach ($cart as $item) {
+                $quantity = $item['quantity'] ?? 1;
+                $subtotal += $item['price'] * $quantity;
+            }
+    
+            //Find coupon
+            $coupon = Coupon::whereCode($code)->first();
+
+    
+            if (!$coupon) {
+                // return response()->json([
+                //     'success' => false,
+                //     'message' => 'Invalid coupon code.'
+                // ]);
+                return redirect()->back()->with('error', 'Invalid coupon code.');
+            }
+    
+           // Calculate discount
+            if ($coupon->type === 'percentage') {
+                $discount = $subtotal * ($coupon->value / 100);
+            } else {
+                $discount = min($coupon->value, $subtotal);
+            }
+    
+            //Save the coupon to a cookie (so it stays for checkout later)
+            Cookie::queue('coupon', json_encode([
+                'code' => $coupon->code,
+                'discount' => $discount
+            ]), 60 * 24); // 1 day
+    
+            $total = $subtotal - $discount;
+            $subtotal=0;
+            $discount=0;
+            $total=0;
+            // return response()->json([
+            //     'success' => true,
+            //     'message' => 'Coupon applied successfully!',
+            //     'subtotalFormatted' => '$' . number_format($subtotal, 2),
+            //     'discountFormatted' => '$' . number_format($discount, 2),
+            //     'totalFormatted' => '$' . number_format($total, 2)
+            // ]);
+            return redirect()->back()->with('success', 'Coupon applied successfully!');
+       
     }
 }

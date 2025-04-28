@@ -18,7 +18,19 @@
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}" href="{{ route('customer.contact') }}">Contact</a></li>
                </ul>
                <div class="nav-icons">
-                   <a href="{{ route('login') }}"><i class="ri-user-line"></i></a>
+                   
+                   @auth 
+                   
+                
+                   <a href="{{ route('customer.dashboard') }}"><i class="ri-user-line"> {{ Auth::user()->name ?? 'User' }}  </i></a>
+
+                   @else
+
+                   
+                   <a href="{{ route('login') }}"><i class="ri-user-line"> Login </i></a>
+
+                   
+                   @endauth 
                    <a href="javascript:void(0)"><i class="ri-search-line"></i></a>
                    @php
                    $cart = json_decode(request()->cookie('cart'), true) ?? [];

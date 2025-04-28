@@ -22,8 +22,8 @@ $subtotal = 0;
 foreach ($cart as $item) {
   $subtotal += $item['price'] * $item['quantity'];
 }
-
-$discount = 0; // Example: apply coupon logic if needed
+$coupon = json_decode(Cookie::get('coupon', '{}'), true);
+$discount = isset($coupon['discount']) ? $coupon['discount'] : 0;
 $tax = 0; // Add tax calculation here (e.g., $subtotal * 0.18)
 $total = $subtotal - $discount + $tax;
 @endphp

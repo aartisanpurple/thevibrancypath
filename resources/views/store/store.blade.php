@@ -13,7 +13,6 @@
             </div>
         </div>
     </div>
-
     @if (session('success'))
     <div class="container d-flex justify-content-center mt-3">
         <div class="alert alert-success text-center w-50">
@@ -32,12 +31,10 @@
                 <div class="col-lg-3 col-md-12 mb-4">
                     <div class="bg-white p-4 rounded shadow-sm sidebar">
                         <h5 class="mb-4">Filter by Category</h5>
-
                         <div class="mb-4">
                             @foreach ($categories as $cat)
                             <div class="mb-3">
                                 <p class="text-muted mb-2 cat_title">{{ $cat->name }}</p>
-
                                 @foreach ($cat->subcategories as $sub)
                                 <div class="form-check mb-2">
                                     <input
@@ -55,11 +52,9 @@
                             </div>
                             @endforeach
                         </div>
-
                         <button type="submit" class="btn btn-sm btn-primary mt-3">Apply Filters</button>
                     </div>
                 </div>
-
                 <!-- Product Grid -->
                 <div class="col-lg-9 col-md-12">
                     <div class="bg-white p-4 rounded shadow-sm sidebar">
@@ -67,7 +62,6 @@
                             <div>
                                 <p class="mb-0 result"><strong>{{ $products->total() }}</strong> Results found.</p>
                             </div>
-
                             <!-- Search bar -->
                             <div class="flex-grow-1 mx-3" style="max-width: 400px;">
                                 <div class="input-group">
@@ -82,19 +76,14 @@
                                     </button>
                                 </div>
                             </div>
+                            <!-- Sort Dropdown -->
+                            <select class="form-select" id="sortSelect" name="sort" style="width: auto;" onchange="this.form.submit()">
+    <option value="popular" {{ request('sort') == 'popular' || !request('sort') ? 'selected' : '' }}>Most Popular</option>
+    <option value="low_to_high" {{ request('sort') == 'low_to_high' ? 'selected' : '' }}>Price: Low to High</option>
+    <option value="high_to_low" {{ request('sort') == 'high_to_low' ? 'selected' : '' }}>Price: High to Low</option>
+</select>
 
-                            <!-- Sort Dropdown (optional logic to be added later) -->
-                            <div class="d-flex align-items-center" style="min-width: 200px;">
-                                <!-- <label for="sortSelect" class="me-2 mb-0">Sort by:</label>
-                            <select class="form-select" id="sortSelect" style="width: auto;" disabled>
-                                <option selected>Most Popular</option>
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                            </select> -->
-                            </div>
                         </div>
-
-
                         <!-- Products Grid -->
                         <div class="row g-4">
                             @foreach ($products as $product)
@@ -111,12 +100,8 @@
                                             {{ $product->description }}
                                         </p>
                                     </div>
-
                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                         <p class="price-txt mb-0">${{ number_format($product->price, 2) }}</p>
-
-
-
                                         <button class="btn btn-primary px-4 add-to-cart"
                                             data-id="{{ $product->id }}"
                                             data-name="{{ $product->name }}"
@@ -124,7 +109,6 @@
                                             data-img="{{ $product->image }}">
                                             Add to cart
                                         </button>
-
                                         <!-- Toast Message (Initially Hidden) -->
                                         <div id="cart-toast" class="position-fixed top-0 end-0 p-3" style="z-index: 1055; display: none;">
                                             <div class="toast align-items-center text-bg-success border-0 show" role="alert">
@@ -136,7 +120,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -153,7 +136,6 @@
     </div>
 </section>
 @endsection
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -208,5 +190,16 @@
             });
         });
 
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sortSelect = document.getElementById('sortSelect');
+
+        if (sortSelect) {
+            sortSelect.addEventListener('change', function () {
+                this.form.submit();
+            });
+        }
     });
 </script>

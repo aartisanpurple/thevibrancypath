@@ -36,24 +36,19 @@ Route::get('/coaching', [HomeController::class, 'coaching'])->name('customer.coa
 //Store cart 
 Route::get('/store', [CartController::class, 'store'])->name('customer.store');
 Route::get('/store-details/{id}', [CartController::class, 'storeDetails'])->name('customer.storeDetails');
-
 Route::post('/store-api', [CartController::class, 'storeApi'])->name('customer.store.api');
-
 Route::get('/store-cart', [CartController::class, 'storeCart'])->name('customer.storecart');
 Route::post('/store-savecart', [CartController::class, 'storesavecart'])->name('customer.savecart');
-
 Route::post('/update-cart', [CartController::class, 'updateCart'])->name('customer.updatecart');
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('customer.removefromcart');
-
 Route::get('/store-search', [CartController::class, 'search'])->name('customer.storesearch');
-
 Route::get('/store-checkoutview', [CartController::class, 'storeCheckoutview'])->name('customer.storecheckoutview');
 Route::post('/store-checkout', [CartController::class, 'storeCheckout'])->name('customer.storecheckout');
-
 Route::get('/store-success', [CartController::class, 'storesuccess'])->name('customer.storesuccess');
 Route::post('/store-clear', [CartController::class, 'clear'])->name('customer.clear');
-
 Route::get('/store-invoice/{orderId}', [CartController::class, 'storeinvoice'])->name('customer.storeinvoice');
+Route::post('/store-applycoupon', [CartController::class, 'applyCoupon'])->name('customer.storeapplycoupon');
+
 
 
 // Customer Authentication Routes
