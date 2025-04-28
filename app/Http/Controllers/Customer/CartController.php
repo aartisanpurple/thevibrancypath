@@ -17,6 +17,7 @@ use App\Models\Orders;
 use App\Models\OrderItems;
 use App\Models\Coupon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 
 class CartController extends Controller
@@ -335,20 +336,27 @@ class CartController extends Controller
         ]);
 
         // Check if user exists by email or create a new one
-        $user = User::firstOrCreate(
-            ['email' => $request->email],
-            [
-                'name' => $request->first_name,
-                'user_name' => strtolower(Str::slug($request->first_name . '-' . uniqid())), // generate unique username
-                'mobile_no' => $request->phone,
-                'email' => $request->email,
-                'user_type' => 'customer', // Adjust based on your logic
-                'status' => 1,
-                // Add password or leave null, depending on your app logic
-                'password' => bcrypt('password123'), // Or generate random
-            ]
-        );
 
+        // Get the authenticated user instance
+        $user = Auth::user();
+        if ($user) {
+            // If the user is authenticated, get their ID
+            $userId = $user->id;
+        } else {
+            $user = User::firstOrCreate(
+                ['email' => $request->email],
+                [
+                    'name' => $request->first_name,
+                    'user_name' => strtolower(Str::slug($request->first_name . '-' . uniqid())), // generate unique username
+                    'mobile_no' => $request->phone,
+                    'email' => $request->email,
+                    'user_type' => 'customer', // Adjust based on your logic
+                    'status' => 1,
+                    // Add password or leave null, depending on your app logic
+                    'password' => bcrypt('password123'), // Or generate random
+                ]
+            );
+        }
         // Create or update primary address
         $address = Address::updateOrCreate(
             ['user_id' => $user->id, 'is_primary' => true],

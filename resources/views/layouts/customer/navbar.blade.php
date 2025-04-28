@@ -11,9 +11,9 @@
                <ul class="navbar-nav mx-auto">
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.home') ? 'active' : '' }}" href="{{ route('customer.home') }}">Home</a></li>
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.about') ? 'active' : '' }}" href="{{ route('customer.about') }}">About</a></li>
-                   <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.course') ? 'active' : '' }}" href="javascript:void(0)">Courses</a></li>
+                   <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.course') ? 'active' : '' }}" href="{{ route('customer.courses') }}">Courses</a></li>
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.store') ? 'active' : '' }}" href="{{ route('customer.store') }}">Store</a></li>
-                   <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.package') ? 'active' : '' }}" href="javascript:void(0)">Packages</a></li>
+                   <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.package') ? 'active' : '' }}" href="{{ route('customer.membership') }}">Packages</a></li>
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.blog') ? 'active' : '' }}" href="{{ route('customer.blog') }}">Blog</a></li>
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}" href="{{ route('customer.contact') }}">Contact</a></li>
                </ul>

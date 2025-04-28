@@ -32,6 +32,8 @@ Route::post('/contact', [HomeController::class, 'contactStore'])->name('customer
 
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('customer.privacypolicy');
 Route::get('/coaching', [HomeController::class, 'coaching'])->name('customer.coaching');
+Route::get('/courses', [HomeController::class, 'courses'])->name('customer.courses');
+Route::get('/membership', [HomeController::class, 'membership'])->name('customer.membership');
 
 //Store cart 
 Route::get('/store', [CartController::class, 'store'])->name('customer.store');
@@ -73,6 +75,8 @@ Route::middleware(['auth', 'check.usertype:customer'])->prefix('customer')->grou
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('customer.dashboard');
     Route::get('/myorder', [DashboardController::class, 'myorder'])->name('customer.myorder');
     Route::get('/myprofile', [DashboardController::class, 'myprofile'])->name('customer.myprofile');
+    Route::get('/mymembership', [DashboardController::class, 'myorder'])->name('customer.mymembership');
+    Route::get('/mycourses', [DashboardController::class, 'myorder'])->name('customer.mycourses');
     // Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders');
     // Route::get('/profile', [ProfileController::class, 'show'])->name('customer.profile');
      Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('customer.logout');

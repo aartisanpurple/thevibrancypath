@@ -13,6 +13,9 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Orders;
 use App\Models\OrderItems;
+use App\Models\Membership;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -119,6 +122,40 @@ class HomeController extends Controller
     public function privacy()
     {
         return view('customer.privacy');
+    }
+    public function courses()
+    {
+        return view('customer.courses');
+    }
+    public function membership()
+    {
+        return view('customer.membership');
+    }
+    
+    public function membershipjoin(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:basic,premium',
+        ]);
+
+        $user = Auth::user();
+        $type = $request->input('type');
+        $duration = $type === 'basic' ? 90 : 180;
+
+        $start = Carbon::now();
+        $end = $start->copy()->addDays($duration);
+
+        // Upsert (create or update) membership
+        // $user->membership()->updateOrCreate(
+        //     ['user_id' => $user->id],
+        //     [
+        //         'type' => $type,
+        //         'start_date' => $start,
+        //         'end_date' => $end,
+        //     ]
+        // );
+
+        return redirect()->route('dashboard')->with('success', 'Membership activated!');
     }
 
 }
