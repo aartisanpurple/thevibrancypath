@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Customer\CartController;
 
 Route::get('/', [HomeController::class, 'index'])->name('customer.home');
+Route::get('/homenew', [HomeController::class, 'indexnew'])->name('customer.homenew');
 Route::get('/about', [HomeController::class, 'about'])->name('customer.about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('customer.contact');
 Route::get('/about', [HomeController::class, 'about'])->name('customer.about');
@@ -32,8 +33,13 @@ Route::post('/contact', [HomeController::class, 'contactStore'])->name('customer
 
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('customer.privacypolicy');
 Route::get('/coaching', [HomeController::class, 'coaching'])->name('customer.coaching');
+Route::get('/vibrancy-signature', [HomeController::class, 'vibrancysignature'])->name('customer.vibrancy-signature');
 Route::get('/courses', [HomeController::class, 'courses'])->name('customer.courses');
 Route::get('/membership', [HomeController::class, 'membership'])->name('customer.membership');
+
+ Route::get('membership-form', [HomeController::class, 'createmembership'])->name('membership-form');
+ Route::post('membership-form', [HomeController::class, 'storemembership'])->name('membership-form.submit');
+
 
 //Store cart 
 Route::get('/store', [CartController::class, 'store'])->name('customer.store');
@@ -63,6 +69,7 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register.submit');
 
+   
     // Password Reset Routes
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
@@ -75,7 +82,7 @@ Route::middleware(['auth', 'check.usertype:customer'])->prefix('customer')->grou
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('customer.dashboard');
     Route::get('/myorder', [DashboardController::class, 'myorder'])->name('customer.myorder');
     Route::get('/myprofile', [DashboardController::class, 'myprofile'])->name('customer.myprofile');
-    Route::get('/mymembership', [DashboardController::class, 'myorder'])->name('customer.mymembership');
+    Route::get('/mymembership', [DashboardController::class, 'mymembership'])->name('customer.mymembership');
     Route::get('/mycourses', [DashboardController::class, 'myorder'])->name('customer.mycourses');
     // Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders');
     // Route::get('/profile', [ProfileController::class, 'show'])->name('customer.profile');

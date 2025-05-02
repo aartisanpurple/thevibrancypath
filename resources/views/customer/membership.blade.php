@@ -27,7 +27,7 @@
                   
 
                     <div class="d-flex justify-content-center gap-3">
-                        <a href="{{ route('login') }}" class="btn btn-primary px-4" style="background-color: #8b0078; border-color: #8b0078;">
+                        <a href="{{ route('membership-form') }}" class="btn btn-primary px-4" style="background-color: #8b0078; border-color: #8b0078;">
                             Join Membership
                         </a>
                         <a href="#learn-more" class="btn btn-outline-secondary px-4">
@@ -57,7 +57,7 @@
                         <li>6) Monthly live Q&A + replay library</li>
                     </ul>
                     <div class="mt-4 text-center">
-                        <a href="{{ route('login') }}" class="btn btn-primary px-4" 
+                        <a href="{{ route('membership-form') }}" class="btn btn-primary px-4" 
                            style="background-color: #8b0078; border-color: #8b0078; border-radius: 30px;">
                             Join Membership
                         </a>
@@ -83,7 +83,7 @@
                         <li>10) Unlimited access to all premium content</li>
                     </ul>
                     <div class="mt-4 text-center">
-                        <a href="{{ route('login') }}" class="btn btn-light px-4" 
+                        <a href="{{ route('membership-form') }}" class="btn btn-light px-4" 
                            style="color: #8b0078; border-radius: 30px;">
                             Join Membership
                         </a>

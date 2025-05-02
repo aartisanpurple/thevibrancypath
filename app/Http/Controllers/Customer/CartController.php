@@ -26,20 +26,13 @@ class CartController extends Controller
     {
         $categories = Category::with('subcategories')->get();
 
-        $products = Product::leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
-            ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
-            ->select(
-                'products.*',
-                'subcategory.id as subcategory_id',
-                'subcategory.name as subcategory_name',
-                'category.id as category_id',
-                'category.name as category_name'
-            )
-            ->latest('products.created_at')
+        $products = Product::with(['subcategory.category'])
+            ->latest('created_at')
             ->paginate(6);
 
         return view('store.store', compact('products', 'categories'));
     }
+
     public function storeDetails($id)
     {
         $store = Product::find($id);
@@ -419,7 +412,12 @@ class CartController extends Controller
         //     'paid' => false,
         // ]);
 
-        return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
+        //return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
+        return redirect()
+    ->route('customer.storesuccess')
+    ->with('success', 'Your order has been placed successfully!')
+    ->with('order_id', $order->id);
+
     }
     public function storesuccess()
     {

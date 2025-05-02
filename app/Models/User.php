@@ -70,7 +70,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
-
+    public function membership()
+    {
+        return $this->hasMany(Membership::class);
+    }
     public function primaryAddress()
     {
         return $this->hasOne(Address::class)->where('is_primary', true);

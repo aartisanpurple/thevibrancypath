@@ -2,7 +2,8 @@
 
 @section('content')
 <!-- Hero Section -->
-<section id="home" class="hero-section">
+<!-- Hero Section -->
+    <section id="home" class="hero-section">
         <div class="wave-shape"></div>
     </section>
 
@@ -43,25 +44,67 @@
     </section> -->
 
     <!-- Testimonials Section -->
-    <section id="testimonials" class="py-5">
+    <!-- <section id="testimonials" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5">Client Testimonials</h2>
             <div class="testimonial-carousel">
                 <div class="row">
-                @foreach($testimonials as $testimonial)
                     <div class="col-md-4">
                         <div class="testimonial-card">
-                            <img src="{{ asset($testimonial->image ?? 'assets/images/default-user.png') }}" alt="Courtney Henry" class="rounded-circle">
-                            <h5>{{ $testimonial->name }}</h5>
-                            <p>{{ $testimonial->message }}</p>
+                            <img src="images/user1.png" alt="Courtney Henry" class="rounded-circle">
+                            <h5>Courtney Henry</h5>
+                            <p>"I would just say it's amazing only three days and I'm able to settle using the
+                                techniques that Jamie taught me."</p>
                         </div>
                     </div>
-                    @endforeach
-                    
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <img src="images/user2.png" alt="Dianne Pine" class="rounded-circle">
+                            <h5>Dianne Pine</h5>
+                            <p>"Jamie's program has given me all the support I just needed to get through this difficult
+                                time in my life."</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <img src="images/user3.png" alt="Darlene Robertson" class="rounded-circle">
+                            <h5>Darlene Robertson</h5>
+                            <p>"Our relationship with Jamie more than met my expectations and brought me peace."</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </section> -->
+
+    <section id="testimonials" class="py-5">
+        <h2 class="text-center mb-4">Client Testimonials</h2>
+        <div class="container position-relative">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                @foreach($testimonials as $testimonial)
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <img src="{{ asset('assets/images/user1.png') }}" alt="Courtney Henry" class="rounded-circle">
+                            <h5>Courtney Henry</h5>
+                            <p>"I would just say it's amazing only three days and I'm able to settle using the
+                                techniques that Jamie taught me."</p>
+                        </div>
+                    </div>
+                   
+                    @endforeach
+                </div>
+                
+               
+            </div>
+            <div class="d-flex swiper_nav justify-content-center gap-3">
+                <div class="swiper-button-prev"><i class="ri-arrow-left-circle-fill"></i></div>
+                <div class="swiper-button-next"><i class="ri-arrow-right-circle-fill"></i></div>
+            </div>
+
+        </div>
     </section>
+
     <!-- Meet Jamie Section -->
     <section class="meet-jamie py-lg-5 py-md-5 py-sm-5  pb-0">
         <div class="container">

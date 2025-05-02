@@ -8,10 +8,10 @@
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-3">
                     <h4>Quick Link</h4>
-                    <ul class="list-unstyled"> 
+                    <ul class="list-unstyled">
                         <li><i class="fa-solid fa-arrow-right-long"></i></i><a href="{{ route('customer.about') }}">About</a></li>
                         <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.coaching') }}">Coaching</a></li>
-                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="#courses">Courses</a></li>
+                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="#">Courses</a></li>
                         <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.store') }}">Store</a></li>
                         <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.privacypolicy') }}">Privacy Policy</a>
                         </li>
@@ -49,14 +49,53 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS and dependencies -->
+
+    
+      <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/parsleyjs@2.9.2/dist/parsley.min.js"></script>
-    <script src="{{ asset('assets/js/frontendcustom.js') }}"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
-   
+
+
+    <!-- Custom JS -->
+ 
+       <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    <script>
+
+
+var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,  // Default for mobile
+        spaceBetween: 10,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            576: {
+                slidesPerView: 1,
+                spaceBetween: 10,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            992: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            }
+        }
+    });
+    </script>
+
+
+
+
+
 </body>
 
 </html>

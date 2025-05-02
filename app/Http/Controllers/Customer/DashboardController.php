@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Orders;
+use App\Models\Membership;
 
 
 class DashboardController extends Controller
@@ -38,6 +39,17 @@ class DashboardController extends Controller
 
         return view('dashboard.myorder', compact('user', 'orders'));
     }
+    public function mymembership()
+    {
+
+        $user = Auth::user();
+
+        // Fetch the membership for the authenticated user
+        $membership = Membership::where('user_id', $user->id)->get();
+    
+        return view('dashboard.mymembership', compact('user', 'membership'));
+    }
+    
     public function addresses()
     {
 
