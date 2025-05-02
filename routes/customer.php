@@ -32,11 +32,16 @@ Route::get('/faq', [HomeController::class, 'faq'])->name('customer.faq');
 Route::post('/contact', [HomeController::class, 'contactStore'])->name('customer.contact.store');
 
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('customer.privacypolicy');
+Route::get('/terms-conditions', [HomeController::class, 'termsandconditions'])->name('customer.terms-conditions');
 Route::get('/coaching', [HomeController::class, 'coaching'])->name('customer.coaching');
 Route::get('/vibrancy-signature', [HomeController::class, 'vibrancysignature'])->name('customer.vibrancy-signature');
 Route::get('/courses', [HomeController::class, 'courses'])->name('customer.courses');
-Route::get('/membership', [HomeController::class, 'membership'])->name('customer.membership');
+Route::get('/courses-healthy-cravings', [HomeController::class, 'courseshealthycravings'])->name('customer.courses-healthy-cravings');
+Route::get('/courses-calming-your-anxiety', [HomeController::class, 'coursescalmingyouranxiety'])->name('customer.courses-calming-your-anxiety');
+Route::get('/courses-loving-relationships', [HomeController::class, 'courseslovingrelationships'])->name('customer.courses-loving-relationships');
 
+Route::get('/membership', [HomeController::class, 'membership'])->name('customer.membership');
+Route::post('/membership-checkout', [HomeController::class, 'membershipcheckout'])->name('customer.membership-checkout');
  Route::get('membership-form', [HomeController::class, 'createmembership'])->name('membership-form');
  Route::post('membership-form', [HomeController::class, 'storemembership'])->name('membership-form.submit');
 

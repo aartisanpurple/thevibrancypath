@@ -11,11 +11,11 @@
                     <ul class="list-unstyled">
                         <li><i class="fa-solid fa-arrow-right-long"></i></i><a href="{{ route('customer.about') }}">About</a></li>
                         <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.coaching') }}">Coaching</a></li>
-                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="#">Courses</a></li>
+                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.courses') }}">Courses</a></li>
                         <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.store') }}">Store</a></li>
                         <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.privacypolicy') }}">Privacy Policy</a>
-                        </li>
-                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="#terms&conditions">Terms &
+                        </li> 
+                        <li><i class="fa-solid fa-arrow-right-long"></i><a href="{{ route('customer.terms-conditions') }}">Terms &
                                 Conditions</a></li>
                     </ul>
                 </div>

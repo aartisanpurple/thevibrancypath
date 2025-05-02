@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('type'); // 'basic' or 'premium'
             $table->date('start_date');
             $table->date('end_date');
+            $table->decimal('amount', 8, 2); // e.g. 999999.99 max
+            $table->string('payment_status'); // e.g. 'paid', 'unpaid', 'pending'
+            $table->string('payment_id')->nullable(); // External payment reference ID
+            $table->timestamp('payment_time')->nullable(); // Time when payment was made
+            $table->text('remarks')->nullable(); // Optional field
             $table->timestamps();
         });
         

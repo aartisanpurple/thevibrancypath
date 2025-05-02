@@ -3,7 +3,7 @@
 @section('content')
 <section class="login-section py-5">
     <div class="container text-center">
-        <h2 class="mb-4">Membership information</h2>
+        <h4 class="mb-4">Membership information</h4>
         @if (session('success'))
         <div class="container d-flex justify-content-center mt-3">
             <div class="alert alert-success text-center w-50">
@@ -11,8 +11,16 @@
             </div>
         </div>
         @endif
+        <h2>Checkout</h2>
+    <p><strong>Type:</strong> {{ $data['type'] }}</p>
+    <p><strong>Price:</strong> ${{ $data['price'] }}</p>
+    <p><strong>Validity:</strong> {{ $data['validity_days'] }} days</p>
         <form class="mx-auto" style="max-width: 400px;" method="POST" id="registerForm" action="{{ route('membership-form') }}" enctype="multipart/form-data" data-parsley-validate>
             @csrf
+            <input type="hidden" name="type" value="{{ $data['type'] }}">
+            <input type="hidden" name="price" value="{{ $data['price'] }}">
+            <input type="hidden" name="validity_days" value="{{ $data['validity_days'] }}">
+
             <!-- Name -->
             <div class="mb-3 text-start">
                 <label for="name" class="form-label">Name</label>

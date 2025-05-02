@@ -12,39 +12,114 @@
 
     </div>
 </section>
-<section class="py-5" style="background-color: #faf7f3;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card border-0 shadow-sm p-4 d-flex flex-row align-items-center" style="background-color: #fbeef7; border-radius: 25px;">
-                    
-                    <!-- Left Image -->
-                    <div class="me-4">
-                        <img src="{{ asset('assets/images/About-soul.png ') }}" alt="Healthy Cravings Series" class="img-fluid" style="max-width: 250px; border-radius: 15px;">
-                    </div>
+<!-- blog Section -->
+<section id="courses" class="py-5">
+    <div class="container ">
 
-                    <!-- Right Content -->
-                    <div>
-                        <p class="mb-3" style="color: #555; font-size: 1.1rem;">
-                            Do you... <br>
-                            struggle with food cravings? <br>
-                            find yourself eating junk at the end of the day? <br>
-                            feel like you’re addicted to sugar, carbs, or fats? <br>
-                            wonder if you are eating to counteract stress or difficult emotions? <br>
-                            wish you were more interested in healthy foods? <br>
-                            wish that eating healthier didn’t require so much darn will power?
-                        </p>
-                        <h5 class="mb-4" style="font-weight: 500;">
-                            If so, we’ve created a 2-part series you’ll love!
-                        </h5>
-                        <a href="/sign-up" class="btn btn-outline-primary px-4" style="border-color: #8b0078; color: #8b0078; border-radius: 30px;">
-                            Sign Me Up → 
-                        </a>
-                    </div>
+    <div class="course gy-4 align-items-center">
+            <div class="course-img text-center">
+                <img src="{{ asset('assets/images/About-soul.png ') }}" alt="course-img" class="img-fluid">
+            </div>
+            <div class="course-content ">
+                <p>
+                    Do you feel overwhelmed with life?
 
-                </div>
+                    <br>
+                    Do you feel a general anxiousness about the state of the world or the political tension?
+
+                    <br>
+                    Does it feel like your world is spinning, and you can’t seem to slow yourself down?
+
+                    <br>
+                    Are you feeling uneasy, or even unsafe?
+
+                    <br>
+                    Maybe you’ve even experienced the misery or even terror that is a panic attack.
+
+                    <br>
+                    If so, we want you to know that we have great compassion for how you’re feeling, that you’re not alone, and that there is hope and possibility ahead!
+
+                    <br>
+
+                </p>
+                <h3>We’ve created a webinar just for you!
+                </h3>
+                <a href="{{ route('customer.courses-calming-your-anxiety') }}" class="btn btn-primary mt-2">Sign me up
+                    <i class="fa-solid fa-arrow-right-long ms-2"></i>
+                </a>
             </div>
         </div>
+
+
+        <div class="course gy-4 align-items-center">
+            <div class="course-img text-center">
+                <img src="{{ asset('assets/images/About-soul.png ') }}" alt="course-img" class="img-fluid">
+            </div>
+            <div class="course-content ">
+                <p>
+                    Do you feel overwhelmed with life?
+
+                    <br>
+                    Do you feel a general anxiousness about the state of the world or the political tension?
+
+                    <br>
+                    Does it feel like your world is spinning, and you can’t seem to slow yourself down?
+
+                    <br>
+                    Are you feeling uneasy, or even unsafe?
+
+                    <br>
+                    Maybe you’ve even experienced the misery or even terror that is a panic attack.
+
+                    <br>
+                    If so, we want you to know that we have great compassion for how you’re feeling, that you’re not alone, and that there is hope and possibility ahead!
+
+                    <br>
+
+                </p>
+                <h3>We’ve created a webinar just for you!
+                </h3>
+                <a href="{{ route('customer.courses-calming-your-anxiety') }}" class="btn btn-primary mt-2">Sign me up
+                    <i class="fa-solid fa-arrow-right-long ms-2"></i>
+                </a>
+            </div>
+        </div>
+
+        
+        <div class="course gy-4 align-items-center">
+            <div class="course-img text-center">
+                <img src="{{ asset('assets/images/About-soul.png ') }}" alt="course-img" class="img-fluid">
+            </div>
+            <div class="course-content ">
+                <p>
+                    Do you feel overwhelmed with life?
+
+                    <br>
+                    Do you feel a general anxiousness about the state of the world or the political tension?
+
+                    <br>
+                    Does it feel like your world is spinning, and you can’t seem to slow yourself down?
+
+                    <br>
+                    Are you feeling uneasy, or even unsafe?
+
+                    <br>
+                    Maybe you’ve even experienced the misery or even terror that is a panic attack.
+
+                    <br>
+                    If so, we want you to know that we have great compassion for how you’re feeling, that you’re not alone, and that there is hope and possibility ahead!
+
+                    <br>
+
+                </p>
+                <h3>We’ve created a webinar just for you!
+                </h3>
+                <a href="{{ route('customer.courses-calming-your-anxiety') }}" class="btn btn-primary mt-2">Sign me up
+                    <i class="fa-solid fa-arrow-right-long ms-2"></i>
+                </a>
+            </div>
+        </div>
+
     </div>
 </section>
 @endsection

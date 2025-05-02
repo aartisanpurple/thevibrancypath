@@ -135,36 +135,47 @@ class HomeController extends Controller
     {
         return view('customer.privacy');
     }
+    public function termsandconditions()
+    {
+        return view('customer.termsandconditions');
+    }
+    
     public function courses()
     {
         return view('customer.courses');
     }
+
+    public function courseshealthycravings()
+    {
+        return view('customer.courses-healthy-cravings');
+    }
+    public function coursescalmingyouranxiety()
+    {
+        return view('customer.courses-calming-your-anxiety');
+    }
+
+    public function courseslovingrelationships()
+    {
+        return view('customer.courses-loving-relationships');
+    }
+
     public function membership()
     {
         return view('customer.membership');
     }
 
-    
-    // public function createmembership(): View
-    // {
+    public function membershipcheckout(Request $request)
+    {
+        // Validate incoming data
+        $data = $request->validate([
+            'type' => 'required|string',
+            'price' => 'required|numeric',
+            'validity_days' => 'required|integer',
+        ]);
 
-    //     return view('auth.membershipcheckout');
-    // }
-
-    // public function storemembership(Request $request): RedirectResponse
-    // {
-       
-    //      // Create a default membership (modify as needed)
-    // Membership::create([
-    //     'user_id' => Auth::id(),
-    //     'type' => 'standard',
-    //     'start_date' => now()->toDateString(),
-    //     'end_date' => now()->addYear()->toDateString(),
-    // ]);
-
-    // return redirect()->back()->with('success', 'membership has been completed.');
-    
-    // }
+        // Optionally store in session or directly pass to view
+        return view('auth.membershipcheckout', compact('data'));
+    }
 
     public function createmembership(Request $request)
     {
