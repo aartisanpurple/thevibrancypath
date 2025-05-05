@@ -33,6 +33,16 @@ class CartController extends Controller
         return view('store.store', compact('products', 'categories'));
     }
 
+    public function storelive()
+    {
+        $categories = Category::with('subcategories')->get();
+    
+        $products = Product::with(['subcategory.category'])
+            ->latest('created_at')
+            ->paginate(6);
+    
+        return view('store.storelive', compact('products', 'categories'));
+    }
     
     public function storeApi(Request $request)
     {
@@ -247,6 +257,57 @@ class CartController extends Controller
 
         return view('store.store', compact('products', 'categories'));
     }
+
+    public function searchlive(Request $request)
+    {
+        $query = Product::query()
+            ->leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
+            ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
+            ->select(
+                'products.*',
+                'subcategory.id as subcategory_id',
+                'subcategory.name as subcategory_name',
+                'category.id as category_id',
+                'category.name as category_name'
+            );
+    
+        // Keyword Search
+        if ($request->filled('keyword')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('products.name', 'like', '%' . $request->keyword . '%')
+                  ->orWhere('products.description', 'like', '%' . $request->keyword . '%');
+            });
+        }
+    
+        // Category/Subcategory Filter
+        if ($request->filled('category_id')) {
+            $query->where('category.id', $request->category_id);
+        }
+    
+        if ($request->filled('subcategory_id')) {
+            $query->where('subcategory.id', $request->subcategory_id);
+        }
+    
+        // Sorting
+        if ($request->sort == 'low_to_high') {
+            $query->orderBy('products.price', 'asc');
+        } elseif ($request->sort == 'high_to_low') {
+            $query->orderBy('products.price', 'desc');
+        } else {
+            $query->latest('products.created_at');
+        }
+    
+        $products = $query->paginate(6)->withQueryString();
+    
+        if ($request->ajax()) {
+            return view('store.partials.product-list', compact('products'))->render();
+        }
+    
+        $categories = Category::with('subcategories')->get();
+        return view('store.storelive', compact('products', 'categories'));
+    }
+    
+
     public function storeCheckoutview()
     {
         return view('store.store-checkout');
