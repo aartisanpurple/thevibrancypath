@@ -45,7 +45,9 @@ Route::post('/membership-checkout', [HomeController::class, 'membershipcheckout'
  Route::get('membership-form', [HomeController::class, 'createmembership'])->name('membership-form');
  Route::post('membershipsubmit', [HomeController::class, 'storemembership'])->name('membershipsubmit');
  Route::get('membershipcomplete', [HomeController::class, 'membershipcomplete'])->name('membershipcomplete');
- Route::get('appointment', [HomeController::class, 'appointment'])->name('appointment');
+ Route::get('appointment', [HomeController::class, 'appointment'])->name('customer.appointment');
+ Route::post('appointment', [HomeController::class, 'storeAppointment'])->name('customer.appointment.store');
+
 
 //Store cart 
 Route::get('/store', [CartController::class, 'store'])->name('customer.store');

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Appointment;
+
 use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -141,7 +143,7 @@ class HomeController extends Controller
     {
         return view('customer.termsandconditions');
     }
-    
+
     public function courses()
     {
         return view('customer.courses');
@@ -183,57 +185,54 @@ class HomeController extends Controller
     {
         return view('auth.membershipcheckout');
     }
-    
-    
 
-public function storemembership(Request $request)
-{
 
-    $request->validate([
-        'name' => 'required',
-        'email' => 'required|email',
-        'mobile_no' => 'required',
-        'type' => 'required',
-        'price' => 'required|numeric',
-        'validity_days' => 'required|integer|min:1',
-    ]);
 
-    $user = Auth::user();
+    public function storemembership(Request $request)
+    {
 
-    if (!$user) {
-        $user = User::firstOrCreate(
-            ['email' => $request->email],
-            [
-                'name' => $request->name,
-                'user_name' => strtolower(Str::slug($request->name . '-' . uniqid())),
-                'mobile_no' => $request->mobile_no,
-                'user_type' => 'customer',
-                'status' => 1,
-                'password' => bcrypt('password123'),
-            ]
-        );
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'mobile_no' => 'required',
+            'type' => 'required',
+            'price' => 'required|numeric',
+            'validity_days' => 'required|integer|min:1',
+        ]);
+
+        $user = Auth::user();
+
+        if (!$user) {
+            $user = User::firstOrCreate(
+                ['email' => $request->email],
+                [
+                    'name' => $request->name,
+                    'user_name' => strtolower(Str::slug($request->name . '-' . uniqid())),
+                    'mobile_no' => $request->mobile_no,
+                    'user_type' => 'customer',
+                    'status' => 1,
+                    'password' => bcrypt('password123'),
+                ]
+            );
+        }
+
+        $startDate = now();
+        $endDate = $startDate->copy()->addDays((int) $request->validity_days);
+
+        $UserMembership = UserMembership::create([
+            'user_id' => $user->id,
+            'type' => $request->type,
+            'price' => $request->price,
+            'start_date' => $startDate->toDateString(),
+            'end_date' => $endDate->toDateString(),
+        ]);
+
+
+
+        return redirect()->route('membershipcomplete')->with('success', 'Membership has been completed.');
     }
 
-    $startDate = now();
-    $endDate = $startDate->copy()->addDays((int) $request->validity_days);
-
-    $UserMembership = UserMembership::create([
-        'user_id' => $user->id,
-        'type' => $request->type,
-        'price' => $request->price,
-        'start_date' => $startDate->toDateString(),
-        'end_date' => $endDate->toDateString(),
-    ]);
-
-
-   
-    return redirect()->route('membershipcomplete')->with('success', 'Membership has been completed.');
-
-    
- 
-}
-
-public function membershipcomplete(Request $request)
+    public function membershipcomplete(Request $request)
     {
         return view('customer.membershipcomplete');
     }
@@ -242,6 +241,62 @@ public function membershipcomplete(Request $request)
     {
         return view('customer.appointment');
     }
-    
 
+    public function storeAppointment(Request $request)
+    {
+
+        
+        // $request->validate([
+        //     'appointment_time' => 'required|date',
+        //     'notes' => 'nullable|string|max:1000',
+        // ]);
+        // $appointment = Appointment::create([
+        //     'user_id' => 15,
+        //     'name' => "test",
+        //     'email' => "mytest@dhgdj.com",
+        //     'appointment_time' => \Carbon\Carbon::parse($request->appointment_time)->toDateTimeString(),
+        //     'notes' => $request->notes,
+        // ]);
+
+
+        // return redirect()->route('customer.appointment')->with('success', 'Appointment booked successfully!');
+
+
+        $request->validate([
+            'appointment_time' => 'required|date',
+            'notes' => 'nullable|string|max:1000',
+            'name' => 'required_if:guest,true|string|max:255',
+            'email' => 'required_if:guest,true|email|max:255',
+            'mobile_no' => 'required_if:guest,true|string|max:20',
+        ]);
+    
+        // Get authenticated user or create one
+        $user = Auth::user();
+    
+        if (!$user) {
+            $user = User::firstOrCreate(
+                ['email' => $request->email],
+                [
+                    'name' => $request->name,
+                    'user_name' => strtolower(Str::slug($request->name . '-' . uniqid())),
+                    'mobile_no' => $request->mobile_no,
+                    'user_type' => 'customer',
+                    'status' => 1,
+                    'password' => bcrypt('password123'),
+                ]
+            );
+        }
+    
+        // Create appointment
+        $appointment = Appointment::create([
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'appointment_time' => \Carbon\Carbon::parse($request->appointment_time)->toDateTimeString(),
+            'notes' => $request->notes,
+        ]);
+    
+        return redirect()->route('customer.appointment')->with('success', 'Appointment booked successfully!');
+    
+    }
 }

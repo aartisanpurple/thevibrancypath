@@ -18,7 +18,7 @@ class OrdersController extends Controller
             $query->select('id', 'order_id', 'category_id', 'subcategory_id', 'product_id', 'quantity', 'price', 'total_price');
         }])
         ->select('id', 'user_id', 'total_amount', 'order_status', 'payment_status', 'payment_method', 'payment_id')
-        ->orderBy('created_at', 'desc')
+        ->orderBy('id', 'asc') // Sort by ID: latest order first
         ->get();
         return view('admin.orders.index', compact('orders'));
     }
