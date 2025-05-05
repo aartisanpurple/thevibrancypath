@@ -8,8 +8,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <h2>About Us</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis officia nobis rerum
-                        repudiandae minus? Itaque voluptate iure nemo consequatur velit.</p>
+                    <p>Discover Your Soul’s Purpose</p>
                 </div>
             </div>
 

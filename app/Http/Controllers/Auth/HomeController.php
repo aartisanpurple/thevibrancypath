@@ -18,6 +18,8 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\UserMembership;
+
 
 class HomeController extends Controller
 {
@@ -182,46 +184,64 @@ class HomeController extends Controller
         return view('auth.membershipcheckout');
     }
     
-    public function storemembership(Request $request)
-    {
-        // $request->validate([
-        //     'type' => 'required|in:basic,premium',
-        // ]);
-       
+    
 
-           // Get the authenticated user instance
-           $user = Auth::user();
-           if ($user) {
-               // If the user is authenticated, get their ID
-               $userId = $user->id;
-           } else {
-               $user = User::firstOrCreate(
-                   ['email' => $request->email],
-                   [
-                       'name' => $request->name,
-                       'user_name' => strtolower(Str::slug($request->first_name . '-' . uniqid())), // generate unique username
-                       'mobile_no' => $request->phone,
-                       'email' => $request->email,
-                       'user_type' => 'customer', // Adjust based on your logic
-                       'status' => 1,
-                       // Add password or leave null, depending on your app logic
-                       'password' => bcrypt('password123'), // Or generate random
-                   ]
-               );
-           }
-        $type = $request->input('type');
-        $duration = $type === 'basic' ? 90 : 180;
-        $start = Carbon::now();
-        $end = $start->copy()->addDays($duration);
+public function storemembership(Request $request)
+{
 
-        Membership::create([
-        'user_id' => $user->id,
-        'type' => 'standard',
-        'start_date' => now()->toDateString(),
-        'end_date' => now()->addYear()->toDateString(),
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'mobile_no' => 'required',
+        'type' => 'required',
+        'price' => 'required|numeric',
+        'validity_days' => 'required|integer|min:1',
     ]);
 
-        return redirect()->back()->with('success', 'membership has been completed.');
+    $user = Auth::user();
+
+    if (!$user) {
+        $user = User::firstOrCreate(
+            ['email' => $request->email],
+            [
+                'name' => $request->name,
+                'user_name' => strtolower(Str::slug($request->name . '-' . uniqid())),
+                'mobile_no' => $request->mobile_no,
+                'user_type' => 'customer',
+                'status' => 1,
+                'password' => bcrypt('password123'),
+            ]
+        );
     }
+
+    $startDate = now();
+    $endDate = $startDate->copy()->addDays((int) $request->validity_days);
+
+    $UserMembership = UserMembership::create([
+        'user_id' => $user->id,
+        'type' => $request->type,
+        'price' => $request->price,
+        'start_date' => $startDate->toDateString(),
+        'end_date' => $endDate->toDateString(),
+    ]);
+
+
+   
+    return redirect()->route('membershipcomplete')->with('success', 'Membership has been completed.');
+
+    
+ 
+}
+
+public function membershipcomplete(Request $request)
+    {
+        return view('customer.membershipcomplete');
+    }
+
+    public function appointment(Request $request)
+    {
+        return view('customer.appointment');
+    }
+    
 
 }

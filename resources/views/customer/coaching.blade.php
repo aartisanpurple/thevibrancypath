@@ -104,7 +104,9 @@
                     and revitalize you, then Vibrancy Wellness Coaching is for you.
                     1-hr Sessions, in person, by phone or Zoom $200. Call 434.361.2042 for information and to
                     schedule.
-                    If you are a returning client, you may also schedule your appointment online <a href="{{ route('customer.contact') }}">  HERE.</a>.</p>
+                    If you are a returning client, you may also schedule your appointment online </p>
+
+
             </div>
         </div>
     </div>

@@ -43,8 +43,9 @@ Route::get('/courses-loving-relationships', [HomeController::class, 'courseslovi
 Route::get('/membership', [HomeController::class, 'membership'])->name('customer.membership');
 Route::post('/membership-checkout', [HomeController::class, 'membershipcheckout'])->name('customer.membership-checkout');
  Route::get('membership-form', [HomeController::class, 'createmembership'])->name('membership-form');
- Route::post('membership-form', [HomeController::class, 'storemembership'])->name('membership-form.submit');
-
+ Route::post('membershipsubmit', [HomeController::class, 'storemembership'])->name('membershipsubmit');
+ Route::get('membershipcomplete', [HomeController::class, 'membershipcomplete'])->name('membershipcomplete');
+ Route::get('appointment', [HomeController::class, 'appointment'])->name('appointment');
 
 //Store cart 
 Route::get('/store', [CartController::class, 'store'])->name('customer.store');
@@ -88,8 +89,9 @@ Route::middleware(['auth', 'check.usertype:customer'])->prefix('customer')->grou
     Route::get('/myorder', [DashboardController::class, 'myorder'])->name('customer.myorder');
     Route::get('/myprofile', [DashboardController::class, 'myprofile'])->name('customer.myprofile');
     Route::get('/mymembership', [DashboardController::class, 'mymembership'])->name('customer.mymembership');
-    Route::get('/mycourses', [DashboardController::class, 'myorder'])->name('customer.mycourses');
+    Route::get('/mycourses', [DashboardController::class, 'myordercourses'])->name('customer.mycourses');
+    Route::get('/coaching-appointment', [DashboardController::class, 'coachingappointment'])->name('customer.coachingappointment');
     // Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders');
     // Route::get('/profile', [ProfileController::class, 'show'])->name('customer.profile');
      Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('customer.logout');
-});
+}); 

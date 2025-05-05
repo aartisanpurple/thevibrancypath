@@ -33,22 +33,7 @@ class CartController extends Controller
         return view('store.store', compact('products', 'categories'));
     }
 
-    public function storeDetails($id)
-    {
-        $store = Product::find($id);
-        $products = Product::leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
-            ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
-            ->select(
-                'products.*',
-                'subcategory.id as subcategory_id',
-                'subcategory.name as subcategory_name',
-                'category.id as category_id',
-                'category.name as category_name'
-            )
-            ->latest('products.created_at')
-            ->get();
-        return view('store.store-detail', compact('store', 'products'));
-    }
+    
     public function storeApi(Request $request)
     {
         // Handle AJAX Add to Cart
@@ -142,7 +127,22 @@ class CartController extends Controller
 
         return redirect()->back()->with('success', 'Product added to cart!');
     }
-
+    public function storeDetails($id)
+    {
+        $store = Product::find($id);
+        $products = Product::leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
+            ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
+            ->select(
+                'products.*',
+                'subcategory.id as subcategory_id',
+                'subcategory.name as subcategory_name',
+                'category.id as category_id',
+                'category.name as category_name'
+            )
+            ->latest('products.created_at')
+            ->get();
+        return view('store.store-detail', compact('store', 'products'));
+    }
     public function generateCartResponse($cart)
     {
         $subtotal = 0;
@@ -414,10 +414,9 @@ class CartController extends Controller
 
         //return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
         return redirect()
-    ->route('customer.storesuccess')
-    ->with('success', 'Your order has been placed successfully!')
-    ->with('order_id', $order->id);
-
+            ->route('customer.storesuccess')
+            ->with('success', 'Your order has been placed successfully!')
+            ->with('order_id', $order->id);
     }
     public function storesuccess()
     {

@@ -1,36 +1,79 @@
 @extends('layouts.customer.app')
+<style>
+    .card {
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
 
+    </style>
 @section('content')
+<main class="homeNew">
 <!-- Hero Section -->
 <!-- Hero Section -->
-    <section id="home" class="hero-section">
-        <div class="wave-shape"></div>
-    </section>
+<section id="home" class="hero-section text-center text-white d-flex justify-content-center align-items-center" style="height: 100vh; ">
+    <div>
+      
+        <h1 style="margin-left: -400px;">Live Your Soul’s Purpose</h1>
+        <h1 style="margin-left: 450px;">with Passion and Power.</h1>
+    </div>
+    <!--<div class="wave-shape"></div>-->
+</section>
+
+
+
 
     <!-- About Section -->
     <section id="about" class="py-5">
         <div class="container">
-            <div class="row gy-4 align-items-center">
+            <div class="row gy-2 align-items-center">
                 <div class="col-lg-5 col-md-6">
                     <div class="profile-image">
-                        <img src="{{ asset('assets/images/about.png') }}" alt="Jamie" class="img-fluid">
+                        <img src="{{ asset('assets/images/about-new.png') }}" alt="Jamie" class="img-fluid">
                     </div>
                 </div>
-                <div class="col-lg-7 col-md-10">
+                <div class="col-lg-6 col-md-10">
                     <h2>About Vibrancy Path</h2>
                     <p>You’re one of a kind, and it’s time to radiate your own unique light into the world!
-
-                        <br>
-                        <br>
                         What brings you most alive, keeps you energetic and healthy, and makes your life really work for you? It’s written in your very own cells! Whether it’s finding clarity in your purpose, improving relationships, mastering your health or creating harmony within your family, the Vibrancy Path is here to guide you every step of the way toward living authentically, confidently, and vibrantly. It All Starts with the Vibrancy Signature.</p>
-                    <a href="#about" class="btn btn-primary">Learn more about Vibrancy Signature
-                        <i class="fa-solid fa-arrow-right-long ms-2"></i>
-                    </a>
+                  
+                </div>
+
+                
+            </div>
+        </div>
+    </section>
+   <!--video section-->
+   <section class="video-section py-lg-5 py-lg-0 pb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-lg-10 inner-video-section">
+                    <div class="video_res embed-responsive embed-responsive-16by9">
+                        <video id="discover" class="embed-responsive-item video-frame" >
+                            <source src="{{ asset('assets/images/Jamie-video.crdownload') }}" type="video/mp4">
+                        </video>
+                        <div class="video_overlay">
+                            <div class="play_btn">
+                                <i id="icon" class="ri-play-fill"></i>
+                            </div>
+                            <h3>Discover the Blueprint to Your Soul</h3>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+    <a href="#about" class="btn btn-primary">
+        Learn more about Vibrancy Signature
+        <i class="fa-solid fa-arrow-right-long ms-2"></i>
+    </a>
+</div>
+
                 </div>
             </div>
         </div>
     </section>
-
     <!-- Video Section -->
     <!-- <section class="video-section py-5 bg-light">
         <div class="container text-center">
@@ -77,7 +120,7 @@
         </div>
     </section> -->
 
-    <section id="testimonials" class="py-5">
+    <!-- <section id="testimonials" class="py-5">
         <h2 class="text-center mb-4">Client Testimonials</h2>
         <div class="container position-relative">
             <div class="swiper mySwiper">
@@ -93,6 +136,79 @@
                     </div>
                    
                     @endforeach
+                </div>
+                
+               
+            </div>
+            <div class="d-flex swiper_nav justify-content-center gap-3">
+                <div class="swiper-button-prev"><i class="ri-arrow-left-circle-fill"></i></div>
+                <div class="swiper-button-next"><i class="ri-arrow-right-circle-fill"></i></div>
+            </div>
+
+        </div>
+    </section> -->
+    <section id="testimonials" class="py-5">
+        <h2 class="text-center mb-4">Client Testimonials</h2>
+        <div class="container position-relative">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="card text-center p-4 shadow border-0">
+                        <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
+                            <img src="{{ asset('assets/images/user1.png') }}" alt="Courtney Henry" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h5 class="mt-3 mb-2">Courtney Henry</h5>
+                        <p class="text-muted">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
+                        </p>
+                        <a href="#" class="text-decoration-none justify-content-center d-inline-flex align-items-center gap-2">
+                            <i class="ri-play-circle-line fs-5"></i> Watch the Video
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="card text-center p-4 shadow border-0">
+                        <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
+                            <img src="{{ asset('assets/images/user2.png') }}" alt="Courtney Henry" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h5 class="mt-3 mb-2">Courtney Henry</h5>
+                        <p class="text-muted">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
+                        </p>
+                        <a href="#" class="text-decoration-none justify-content-center d-inline-flex align-items-center gap-2">
+                            <i class="ri-play-circle-line fs-5"></i> Watch the Video
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="card text-center p-4 shadow border-0">
+                        <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
+                            <img src="{{ asset('assets/images/user3.png') }}" alt="Courtney Henry" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h5 class="mt-3 mb-2">Courtney Henry</h5>
+                        <p class="text-muted">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
+                        </p>
+                        <a href="#" class="text-decoration-none justify-content-center d-inline-flex align-items-center gap-2">
+                            <i class="ri-play-circle-line fs-5"></i> Watch the Video
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="card text-center p-4 shadow border-0">
+                        <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
+                            <img src="{{ asset('assets/images/user4.png') }}" alt="Courtney Henry" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h5 class="mt-3 mb-2">Courtney Henry</h5>
+                        <p class="text-muted">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
+                        </p>
+                        <a href="#" class="text-decoration-none d-inline-flex justify-content-center align-items-center gap-2">
+                            <i class="ri-play-circle-line fs-5"></i> Watch the Video
+                        </a>
+                    </div>
+                </div>
+
                 </div>
                 
                
@@ -128,4 +244,5 @@
             </div>
         </div>
     </section>
+    </main>
 @endsection
