@@ -10,7 +10,7 @@ use App\Models\Orders;
 use App\Models\Membership;
 use App\Models\Appointment;
 use App\Models\UserMembership;
-
+use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
@@ -29,6 +29,16 @@ class DashboardController extends Controller
 
         return view('dashboard.profile', compact('user', 'orders'));
     }
+
+
+    public function updateProfile(Request $request)
+    {
+
+        // Redirect or return with a success message
+        return redirect()->route('customer.myprofile')->with('success', 'Profile updated successfully!');
+    }
+
+
     public function myorder()
     {
 
@@ -37,35 +47,36 @@ class DashboardController extends Controller
         // Get user's orders with related order items and product (including category)
         $orders = Orders::with(['order_items.product.category'])
             ->where('user_id', $user->id)
+            ->latest() // same as orderBy('created_at', 'desc')
             ->get();
 
         return view('dashboard.myorder', compact('user', 'orders'));
     }
     public function myordercourses()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Get user's orders that include products in category ID 3
-    $orders = Orders::with(['order_items.product.category'])
-        ->where('user_id', $user->id)
-        ->whereHas('order_items.product.category', function ($query) {
-            $query->where('id', 3);
-        })
-        ->get();
+        // Get user's orders that include products in category ID 3
+        $orders = Orders::with(['order_items.product.category'])
+            ->where('user_id', $user->id)
+            ->whereHas('order_items.product.category', function ($query) {
+                $query->where('id', 3);
+            })
+            ->get();
 
-    return view('dashboard.myordercourses', compact('user', 'orders'));
-}
-public function coachingappointment()
-{
-    $user = Auth::user();
+        return view('dashboard.myordercourses', compact('user', 'orders'));
+    }
+    public function coachingappointment()
+    {
+        $user = Auth::user();
 
-    // Get user's orders that include products in category ID 3
-    $orders = Appointment::where('user_id', $user->id)
-        ->orderBy('appointment_time', 'desc')
-        ->get();
+        // Get user's orders that include products in category ID 3
+        $orders = Appointment::where('user_id', $user->id)
+            ->orderBy('appointment_time', 'desc')
+            ->get();
 
-    return view('dashboard.coachingappointment', compact('user', 'orders'));
-}
+        return view('dashboard.coachingappointment', compact('user', 'orders'));
+    }
 
 
     public function mymembership()
@@ -74,15 +85,13 @@ public function coachingappointment()
         $user = Auth::user();
 
         // Fetch the membership for the authenticated user
-       
-    // Fetch all memberships for the authenticated user
-    $membership = UserMembership::where('user_id', $user->id)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-    
-        return view('dashboard.mymembership', compact('user', 'membership'));
 
-        
+        // Fetch all memberships for the authenticated user
+        $membership = UserMembership::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dashboard.mymembership', compact('user', 'membership'));
     }
     public function addresses()
     {

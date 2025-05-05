@@ -60,9 +60,31 @@
                                 <td>{{ $order->payment_method }}</td>
                               <td>{{ $order->created_at }}</td>
                               <td>
-                                <a href="" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View">
+                              <div class="d-flex gap-2">
+                                        <a href="{{ route('admin.orders.show', $order->id) }}" 
+                                           class="btn btn-info btn-sm" 
+                                           data-bs-toggle="tooltip" 
+                                           data-bs-placement="top" 
+                                           title="View">
                                             <i class="bx bx-show"></i>
                                         </a>
+                                        <a href="{{ route('admin.orders.edit', $order->id) }}" 
+                                           class="btn btn-primary btn-sm"
+                                           data-bs-toggle="tooltip" 
+                                           data-bs-placement="top" 
+                                           title="Edit">
+                                            <i class="bx bx-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-danger btn-sm delete-product" 
+                                                data-id="{{ $order->id }}"
+                                                data-url="{{ route('admin.orders.destroy', $order->id) }}"
+                                                data-bs-toggle="tooltip" 
+                                                data-bs-placement="top" 
+                                                title="Delete">
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </div>
 
                               </td>
                             </tr>

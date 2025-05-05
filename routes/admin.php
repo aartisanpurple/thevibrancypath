@@ -96,7 +96,15 @@ Route::middleware(['auth', 'check.usertype:admin'])->prefix('admin')->group(func
     ]);
     Route::resource('orders', OrdersController::class)->names([
         'index' => 'admin.orders.index',
+        'create' => 'admin.orders.create',
+        'store' => 'admin.orders.store',
+        'edit' => 'admin.orders.edit',
+        'update' => 'admin.orders.update',
+        'destroy' => 'admin.orders.destroy',
+        'show' => 'admin.orders.show',
     ]);
+
+
     Route::prefix('admin')->name('admin.')->group(function () {
         // Existing routes...
         

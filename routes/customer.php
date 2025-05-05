@@ -92,6 +92,7 @@ Route::middleware(['auth', 'check.usertype:customer'])->prefix('customer')->grou
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('customer.dashboard');
     Route::get('/myorder', [DashboardController::class, 'myorder'])->name('customer.myorder');
     Route::get('/myprofile', [DashboardController::class, 'myprofile'])->name('customer.myprofile');
+    Route::post('/myprofile', [DashboardController::class, 'updateProfile'])->name('customer.myprofile.update');
     Route::get('/mymembership', [DashboardController::class, 'mymembership'])->name('customer.mymembership');
     Route::get('/mycourses', [DashboardController::class, 'myordercourses'])->name('customer.mycourses');
     Route::get('/coaching-appointment', [DashboardController::class, 'coachingappointment'])->name('customer.coachingappointment');

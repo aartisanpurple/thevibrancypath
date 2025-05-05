@@ -20,6 +20,17 @@
         </div>
     </div>
     @endif
+    <!-- Toast Message (Initially Hidden) -->
+<div id="cart-toast" class="position-fixed top-0 end-0 p-3" style="z-index: 1055; display: none;">
+    <div class="toast align-items-center text-bg-success border-0 show" role="alert">
+        <div class="d-flex">
+            <div class="toast-body">
+                Product added to cart!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="$('#cart-toast').fadeOut();"></button>
+        </div>
+    </div>
+</div>
 </section>
 <section class="product-section py-5 mt-5" style="background-color: #f7f3ef;">
     <div class="container">
@@ -70,17 +81,7 @@
     </div>
 </div>
 
-<!-- Toast Message (Initially Hidden) -->
-<div id="cart-toast" class="position-fixed top-0 end-0 p-3" style="z-index: 1055; display: none;">
-    <div class="toast align-items-center text-bg-success border-0 show" role="alert">
-        <div class="d-flex">
-            <div class="toast-body">
-                Product added to cart!
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="$('#cart-toast').fadeOut();"></button>
-        </div>
-    </div>
-</div>
+
 
                 <!-- Product Grid -->
                 <div class="col-lg-9 col-md-12">

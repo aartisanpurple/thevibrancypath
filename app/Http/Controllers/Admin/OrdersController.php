@@ -18,8 +18,30 @@ class OrdersController extends Controller
             $query->select('id', 'order_id', 'category_id', 'subcategory_id', 'product_id', 'quantity', 'price', 'total_price');
         }])
         ->select('id', 'user_id', 'total_amount', 'order_status', 'payment_status', 'payment_method', 'payment_id')
-        ->orderBy('id', 'asc') // Sort by ID: latest order first
+        ->orderBy('created_at', 'desc')
         ->get();
         return view('admin.orders.index', compact('orders'));
     }
+
+    public function show($id)
+{
+
+    $order = Orders::with([
+        'order_items.product',       // Loads related products for each item
+        'user',                      // Loads the user who placed the order
+    ])->findOrFail($id);
+
+    return view('admin.orders.show', compact('order'));
+}
+
+
+public function pending()
+{
+
+    $order = Orders::where('status', 'pending')->get();
+
+    return view('admin.orders.show', compact('order'));
+}
+
+
 }
