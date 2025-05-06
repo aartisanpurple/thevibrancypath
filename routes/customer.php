@@ -55,6 +55,7 @@ Route::get('/storelive', [CartController::class, 'storelive'])->name('customer.s
 Route::get('/store-searchlive', [CartController::class, 'searchlive'])->name('customer.storesearchlive');
 Route::get('/store-details/{id}', [CartController::class, 'storeDetails'])->name('customer.storeDetails');
 Route::post('/store-api', [CartController::class, 'storeApi'])->name('customer.store.api');
+Route::post('/store-wishlistapi', [CartController::class, 'storewhishlistApi'])->name('customer.store.wishlistapi');
 Route::get('/store-cart', [CartController::class, 'storeCart'])->name('customer.storecart');
 Route::post('/store-savecart', [CartController::class, 'storesavecart'])->name('customer.savecart');
 Route::post('/update-cart', [CartController::class, 'updateCart'])->name('customer.updatecart');

@@ -3,17 +3,17 @@
 @section('content')
 <!-- Hero Section -->
 <section class="inner_banner">
-    <img src="{{ asset('assets/images/inner-banner.svg') }}" class="w-100" alt="">
-    <div class="inner_banner_caption d-flex align-items-center" style="min-height: 300px;">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-10">
-                    <h2>Invoice</h2>
-                </div>
-            </div>
+  <img src="{{ asset('assets/images/inner-banner.svg') }}" class="w-100" alt="">
+  <div class="inner_banner_caption d-flex align-items-center" style="min-height: 300px;">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-lg-10">
+          <h2>Invoice</h2>
         </div>
+      </div>
     </div>
-    <h4 class="text-center mt-3">Welcome to The Vibrancy Path.</h4>
+  </div>
+  <h4 class="text-center mt-3">Welcome to The Vibrancy Path.</h4>
 </section>
 
 <section class="py-5" style="background-color: #faf7f3;">
@@ -28,15 +28,29 @@
 
           <div class="row mb-4">
             <div class="col-md-6">
-              <p><strong>Bill To:</strong> {{ $order->first_name ?? 'N/A' }}</p>
-              <p><strong>Address:</strong> {{ $order->address1 }}, {{ $order->city }}</p>
-              <p><strong>Phone:</strong> {{ $order->phone }}</p>
-              <p><strong>Email:</strong> {{ $order->email }}</p>
+              {{-- Billing / User Info --}}
+              <p><strong>Bill To:</strong> {{ $order->user->name ?? 'N/A' }} </p>
+              <p><strong>Email:</strong> {{ $order->user->email ?? 'N/A' }}</p>
+
+              {{-- Shipping Address --}}
+              @if (!empty($order->order_address) && !empty($order->order_address->address))
+              <p><strong>Address:</strong>
+                {{ $order->order_address->address->address1 ?? '' }},
+                {{ $order->order_address->address->city ?? '' }},
+                {{ $order->order_address->address->state ?? '' }},
+                {{ $order->order_address->address->postal_code ?? '' }}
+              </p>
+
+              @else
+              <p><strong>Address:</strong> N/A</p>
+              <p><strong>Phone:</strong> N/A</p>
+              @endif
+
             </div>
             <div class="col-md-6 text-md-end">
               <p><strong>Invoice No:</strong> INV-{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</p>
-            
-          
+
+
 
 
             </div>

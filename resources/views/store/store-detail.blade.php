@@ -49,12 +49,40 @@
       <div class="col-md-6">
         <h4>{{ $store->name }}</h4>
         <div class="d-flex align-items-center mb-2">
-          <div class="text-warning me-2">★★★★★</div>
-          <span class="small text-muted">4.7 Star Rating (21,671 User feedback)</span>
+          <!-- Dynamic Star Rating -->
+          <div class="d-flex align-items-center mb-2">
+            <div class="text-warning me-2">
+              @php
+              $fullStars = floor($averageRating);
+              $halfStar = ($averageRating - $fullStars) >= 0.5;
+              @endphp
+
+              @for ($i = 1; $i <= 5; $i++)
+                @if ($i <=$fullStars)
+                ★
+                @elseif ($i===$fullStars + 1 && $halfStar)
+                <span style="position: relative; display: inline-block;">
+                <span style="position: absolute; width: 50%; overflow: hidden;">★</span>☆
+                </span>
+                @else
+                ☆
+                @endif
+                @endfor
+            </div>
+
+            <span class="small text-muted">
+              @if ($reviewCount > 0)
+              {{ $averageRating }} Star Rating ({{ $reviewCount }} User{{ $reviewCount > 1 ? 's' : '' }} feedback)
+              @else
+              No reviews yet
+              @endif
+            </span>
+          </div>
+
         </div>
 
-        <p class="mb-1"><strong>Net Weight:</strong> 30ml</p>
-        <p class="mb-1"><strong>Availability:</strong> <span class="text-success">In Stock</span></p>
+
+       
 
         <h5 class="text-primary my-3">
           ${{ number_format($store->price, 2) }}
@@ -92,22 +120,11 @@
       @foreach($relatedProducts as $relatedProduct)
       <div class="col-md-3 col-sm-6 mb-4">
         <div class="card h-100">
-          <!-- Product Image -->
           <img src="{{ url('/' . $relatedProduct->image) }}" class="card-img-top" alt="{{ $relatedProduct->name }}" style="object-fit: cover; height: 200px;">
-
           <div class="card-body d-flex flex-column">
-            <!-- Product Name as a Link -->
-            <h5 class="card-title text-center">
-              <a href="{{ route('customer.storeDetails', ['id' => $relatedProduct->id]) }}" class="text-decoration-none text-dark">
-                {{ $relatedProduct->name }}
-              </a>
-            </h5>
-
-            <!-- Product Price -->
+            <h5 class="card-title text-center">{{ $relatedProduct->name }}</h5>
             <p class="card-text text-center">${{ number_format($relatedProduct->price, 2) }}</p>
-
-            <!-- View Product Button as a Link -->
-            <a href="{{ route('customer.storeDetails', ['id' => $relatedProduct->id]) }}" class="btn btn-primary btn-sm mt-auto mx-auto d-block">View Product</a>
+            <a href="" class="btn btn-primary btn-sm mt-auto mx-auto d-block">View Product</a>
           </div>
         </div>
       </div>
@@ -115,7 +132,6 @@
     </div>
   </div>
 </section>
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

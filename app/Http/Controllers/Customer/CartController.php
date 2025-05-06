@@ -14,6 +14,7 @@ use App\Models\OrderAddress;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\Wishlist;
 use App\Models\Orders;
 use App\Models\OrderItems;
 use App\Models\Coupon;
@@ -97,6 +98,39 @@ class CartController extends Controller
         // return view('store', compact('products'));
 
     }
+
+    public function storewhishlistApi(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'product_name' => 'required|string',
+            'product_price' => 'required|numeric',
+            'product_img' => 'required|string',
+        ]);
+    
+        $user = Auth::user();
+    
+        $existing = Wishlist::where('user_id', $user->id)
+                            ->where('product_id', $request->product_id)
+                            ->first();
+    
+        if ($existing) {
+            return response()->json(['success' => false, 'message' => 'Already in wishlist']);
+        }
+    
+        Wishlist::create([
+            'user_id' => $user->id,
+            'product_id' => $request->product_id,
+            'product_name' => $request->product_name,
+            'product_price' => $request->product_price,
+            'product_img' => $request->product_img,
+        ]);
+    
+        return response()->json(['success' => true, 'message' => 'Added to wishlist']);
+    
+
+    }
+
     public function storeCart()
     {
         $cart = json_decode(Cookie::get('cart', '[]'), true);
@@ -140,25 +174,35 @@ class CartController extends Controller
     }
     public function storeDetails($id)
     {
-        $store = Product::find($id);
+        $store = Product::with([
+            'reviews.user', // Load all reviews with associated user
+            'subcategory:id,name',
+            'subcategory.category:id,name'
+        ])->findOrFail($id);
 
-        // Eager load 'subcategory' and 'category' relationships
         $products = Product::with([
-            'subcategory:id,name',  // Select only needed fields from the 'subcategory' table
-            'subcategory.category:id,name' // Eager load the parent 'category' and select only needed fields
+            'subcategory:id,name',
+            'subcategory.category:id,name'
         ])
-            ->where('products.id', $id)  // Filter to fetch specific product if needed
-            ->latest('created_at')  // Order by 'created_at'
+            ->where('products.id', $id)
+            ->latest('created_at')
             ->get();
 
-        $relatedProducts = Product::where('id', '!=', $store->id) // Exclude current product
-            ->inRandomOrder()  // Randomize the order
-            ->limit(3)  // Limit to 3 random products
+        $relatedProducts = Product::where('id', '!=', $store->id)
+            ->inRandomOrder()
+            ->limit(3)
             ->get();
 
+        $averageRating = round($store->reviews()->avg('rating'), 1);
+        $reviewCount = $store->reviews()->count();
 
-
-        return view('store.store-detail', compact('store', 'products', 'relatedProducts'));
+        return view('store.store-detail', compact(
+            'store',
+            'products',
+            'relatedProducts',
+            'averageRating',
+            'reviewCount'
+        ));
     }
     public function generateCartResponse($cart)
     {
@@ -458,7 +502,9 @@ class CartController extends Controller
                 $query->select('id', 'order_id', 'category_id', 'subcategory_id', 'product_id', 'quantity', 'price', 'total_price')
                     ->with(['product', 'category', 'subcategory']); // Optional: if you have these relationships
             },
-            'user' // Assuming the order is linked to a user (customer)
+            'user',
+            'order_address.address' // Load the shipping address through the order_address relationship
+
         ])
             ->select('id', 'user_id', 'total_amount', 'order_status', 'payment_status', 'payment_method', 'payment_id')
             ->findOrFail($orderId);

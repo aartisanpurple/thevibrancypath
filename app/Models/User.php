@@ -82,11 +82,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Affiliate::class);
     }
-    
+
     // public function referredCommissions()
     // {
     //     return $this->hasMany(AffiliateCommission::class, 'referred_user_id');
     // }
-    
 
+    public function wishlist()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

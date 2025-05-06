@@ -21,12 +21,12 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card text-center border-0 shadow-sm p-4">
-                @if (session('success'))
-    <div class="alert alert-success">
-  
-        Order ID: {{ session('order_id') }}
-    </div>
-@endif
+                    @if (session('success'))
+                    <div class="alert alert-success">
+
+                        Order ID: VPORD{{ session('order_id') }}
+                    </div>
+                    @endif
 
                     <h4 class="mb-3">Your order successfully placed</h4>
                     <p class="text-muted mb-4">

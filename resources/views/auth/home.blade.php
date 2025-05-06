@@ -1,16 +1,5 @@
 @extends('layouts.customer.app')
-<style>
-    .card {
-    border-radius: 20px;
-    background: #fff;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
-}
-.card:hover {
-    transform: translateY(-5px);
-}
 
-    </style>
 @section('content')
 <main class="homeNew">
 <!-- Hero Section -->
@@ -148,78 +137,34 @@
         </div>
     </section> -->
     <section id="testimonials" class="py-5">
-        <h2 class="text-center mb-4">Client Testimonials</h2>
-        <div class="container position-relative">
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="card text-center p-4 shadow border-0">
-                        <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
-                            <img src="{{ asset('assets/images/user1.png') }}" alt="Courtney Henry" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+    <h2 class="text-center mb-4">Client Testimonials</h2>
+    <div class="container position-relative">
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                @foreach ($testimonials as $testimonial)
+                    <div class="swiper-slide">
+                        <div class="card text-center p-4 shadow border-0">
+                            <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
+                                <img src="{{ asset($testimonial->image) }}" alt="{{ $testimonial->name }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <h5 class="mt-3 mb-2">{{ $testimonial->name }}</h5>
+                            <p class="text-muted">
+                                {{ $testimonial->message }}
+                            </p>
+                            <a href="{{ $testimonial->video_url }}" class="text-decoration-none justify-content-center d-inline-flex align-items-center gap-2">
+                                <i class="ri-play-circle-line fs-5"></i> Watch the Video
+                            </a>
                         </div>
-                        <h5 class="mt-3 mb-2">Courtney Henry</h5>
-                        <p class="text-muted">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
-                        </p>
-                        <a href="#" class="text-decoration-none justify-content-center d-inline-flex align-items-center gap-2">
-                            <i class="ri-play-circle-line fs-5"></i> Watch the Video
-                        </a>
                     </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card text-center p-4 shadow border-0">
-                        <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
-                            <img src="{{ asset('assets/images/user2.png') }}" alt="Courtney Henry" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <h5 class="mt-3 mb-2">Courtney Henry</h5>
-                        <p class="text-muted">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
-                        </p>
-                        <a href="#" class="text-decoration-none justify-content-center d-inline-flex align-items-center gap-2">
-                            <i class="ri-play-circle-line fs-5"></i> Watch the Video
-                        </a>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card text-center p-4 shadow border-0">
-                        <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
-                            <img src="{{ asset('assets/images/user3.png') }}" alt="Courtney Henry" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <h5 class="mt-3 mb-2">Courtney Henry</h5>
-                        <p class="text-muted">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
-                        </p>
-                        <a href="#" class="text-decoration-none justify-content-center d-inline-flex align-items-center gap-2">
-                            <i class="ri-play-circle-line fs-5"></i> Watch the Video
-                        </a>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card text-center p-4 shadow border-0">
-                        <div class="mx-auto" style="width: 190px; height: 190px; border: 5px solid #e3c87c; border-radius: 50%; overflow: hidden;">
-                            <img src="{{ asset('assets/images/user4.png') }}" alt="Courtney Henry" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <h5 class="mt-3 mb-2">Courtney Henry</h5>
-                        <p class="text-muted">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
-                        </p>
-                        <a href="#" class="text-decoration-none d-inline-flex justify-content-center align-items-center gap-2">
-                            <i class="ri-play-circle-line fs-5"></i> Watch the Video
-                        </a>
-                    </div>
-                </div>
-
-                </div>
-                
-               
+                @endforeach
             </div>
-            <div class="d-flex swiper_nav justify-content-center gap-3">
-                <div class="swiper-button-prev"><i class="ri-arrow-left-circle-fill"></i></div>
-                <div class="swiper-button-next"><i class="ri-arrow-right-circle-fill"></i></div>
-            </div>
-
         </div>
-    </section>
+        <div class="d-flex swiper_nav justify-content-center gap-3">
+            <div class="swiper-button-prev"><i class="ri-arrow-left-circle-fill"></i></div>
+            <div class="swiper-button-next"><i class="ri-arrow-right-circle-fill"></i></div>
+        </div>
+    </div>
+</section>
 
     <!-- Meet Jamie Section -->
     <section class="meet-jamie py-lg-5 py-md-5 py-sm-5  pb-0">
