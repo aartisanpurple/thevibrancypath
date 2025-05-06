@@ -14,4 +14,11 @@ class Address extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // Get all order addresses that use this address.
+    public function order_addresses()
+    {
+        return $this->hasMany(OrderAddress::class, 'address_id');
+    }
+
 }

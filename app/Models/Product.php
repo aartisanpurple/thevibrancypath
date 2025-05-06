@@ -18,4 +18,19 @@ class Product extends Model
     {
         return $this->belongsTo(SubCategory::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->reviews()->avg('rating');
+    }
+
+    public function reviewCount()
+    {
+        return $this->reviews()->count();
+    }
 }

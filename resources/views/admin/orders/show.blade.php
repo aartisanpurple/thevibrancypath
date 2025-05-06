@@ -28,6 +28,16 @@
                         <h5>User Information</h5>
                         <p><strong>Name:</strong> {{ $order->user->name }}</p>
                         <p><strong>Email:</strong> {{ $order->user->email }}</p>
+                        <h5>Shipping Address </h5>
+                        @if ($order->order_address && $order->order_address->address)
+                        {{ $order->order_address->address->address }},
+                        {{ $order->order_address->address->city }},
+                        {{ $order->order_address->address->state }},
+                        {{ $order->order_address->address->country }},
+                        {{ $order->order_address->address->postal_code }}
+                        @else
+                        <em>No address available</em>
+                        @endif
                     </div>
 
                     <!-- Order Info -->
@@ -44,9 +54,9 @@
                                 <span class="badge 
         {{ $order->order_status == 0 ? 'bg-warning' : 
            ($order->order_status == 1 ? 'bg-success' : 'bg-danger') }}">
-        {{ $order->order_status == 0 ? 'Pending' : 
+                                    {{ $order->order_status == 0 ? 'Pending' : 
            ($order->order_status == 1 ? 'Completed' : 'Cancelled') }}
-    </span>
+                                </span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -63,8 +73,8 @@
                             <div class="border p-3 rounded">
                                 <strong>Payment Method:</strong>
                                 <p class="mb-0">
-    {{ $order->payment_method == 1 ? 'Cash on Delivery' : 'Other' }}
-</p>
+                                    {{ $order->payment_method == 1 ? 'Cash on Delivery' : 'Other' }}
+                                </p>
 
                             </div>
                         </div>
@@ -72,17 +82,17 @@
                             <div class="border p-3 rounded">
                                 <strong>Payment Status:</strong>
                                 @php
-    $paymentStatus = match($order->payment_status) {
-        0 => ['label' => 'Pending', 'badge' => 'warning'],
-        1 => ['label' => 'Paid', 'badge' => 'success'],
-        2 => ['label' => 'Failed', 'badge' => 'danger'],
-        default => ['label' => 'Unknown', 'badge' => 'secondary'],
-    };
-@endphp
+                                $paymentStatus = match($order->payment_status) {
+                                0 => ['label' => 'Pending', 'badge' => 'warning'],
+                                1 => ['label' => 'Paid', 'badge' => 'success'],
+                                2 => ['label' => 'Failed', 'badge' => 'danger'],
+                                default => ['label' => 'Unknown', 'badge' => 'secondary'],
+                                };
+                                @endphp
 
-<span class="badge bg-{{ $paymentStatus['badge'] }}">
-    {{ $paymentStatus['label'] }}
-</span>
+                                <span class="badge bg-{{ $paymentStatus['badge'] }}">
+                                    {{ $paymentStatus['label'] }}
+                                </span>
 
                             </div>
                         </div>
@@ -114,9 +124,9 @@
                                         <td>{{ $item->product->name ?? 'Product Deleted' }}</td>
                                         <td>
                                             @if(isset($item->product->image))
-                                                <img src="{{ asset($item->product->image) }}" alt="Product Image" width="60">
+                                            <img src="{{ asset($item->product->image) }}" alt="Product Image" width="60">
                                             @else
-                                                <span class="text-muted">N/A</span>
+                                            <span class="text-muted">N/A</span>
                                             @endif
                                         </td>
                                         <td>{{ $item->quantity }}</td>

@@ -1,4 +1,5 @@
 @extends('layouts.customer.app')
+<link rel="stylesheet" href="{{ asset('assets/css/pages/store.css') }}">
 
 @section('content')
 <!-- Hero Section -->
@@ -9,27 +10,28 @@
       <div class="row justify-content-center text-center">
         <div class="col-lg-10">
           <h2>Store</h2>
-          <p>Welcome to The Vibrancy Path. Use the category links on the sidebar to start shopping.</p>
+          <p>Product Details</p>
         </div>
       </div>
     </div>
   </div>
   <h4 class="text-center mt-3">Welcome to The Vibrancy Path.</h4>
 </section>
+
 <!-- Product Detail Section -->
 <section class="py-5" style="background-color: #f7f3ef;">
   <div class="container">
     <div class="row g-4">
-      <!-- Image Thumbnails -->
+      <!-- Thumbnails -->
       <div class="col-md-2 d-flex justify-content-center">
         <div class="d-flex flex-column overflow-auto" style="max-height: 400px; gap: 6px;">
-          <img src="{{ url('/' . $store->image) }}" class="img-fluid border rounded" alt="Thumb" style="height: 90px; object-fit: cover; cursor: pointer;">
-          <img src="{{ url('/' . $store->image) }}" class="img-fluid border rounded" alt="Thumb" style="height: 90px; object-fit: cover; cursor: pointer;">
-          <img src="{{ url('/' . $store->image) }}" class="img-fluid border rounded" alt="Thumb" style="height: 90px; object-fit: cover; cursor: pointer;">
+          @for($i = 0; $i < 3; $i++)
+            <img src="{{ url('/' . $store->image) }}" class="img-fluid border rounded" alt="Thumb" style="height: 90px; object-fit: cover; cursor: pointer;">
+            @endfor
         </div>
       </div>
 
-      <!-- Main Product Image -->
+      <!-- Main Image -->
       <div class="col-md-4 text-center d-flex align-items-center justify-content-center">
         <div>
           <img id="mainProductImage"
@@ -47,9 +49,7 @@
       <div class="col-md-6">
         <h4>{{ $store->name }}</h4>
         <div class="d-flex align-items-center mb-2">
-          <div class="text-warning me-2">
-            ★★★★★
-          </div>
+          <div class="text-warning me-2">★★★★★</div>
           <span class="small text-muted">4.7 Star Rating (21,671 User feedback)</span>
         </div>
 
@@ -65,7 +65,7 @@
           {{ $store->description }}
         </p>
 
-        <!-- Quantity and Add to Cart -->
+        <!-- Quantity + Add to Cart -->
         <div class="d-flex align-items-center mt-4">
           <div class="input-group me-3" style="width: 100px;">
             <button class="btn btn-outline-secondary quantity-decrease" type="button">-</button>
@@ -81,17 +81,46 @@
           </button>
         </div>
       </div>
-
     </div>
   </div>
 </section>
-@endsection
+<!-- Related Products Section -->
+<section class="py-5" style="background-color: #f7f3ef;">
+  <div class="container">
+    <h4 class="mb-4 text-center">Frequently Bought Together</h4>
+    <div class="row justify-content-center">
+      @foreach($relatedProducts as $relatedProduct)
+      <div class="col-md-3 col-sm-6 mb-4">
+        <div class="card h-100">
+          <!-- Product Image -->
+          <img src="{{ url('/' . $relatedProduct->image) }}" class="card-img-top" alt="{{ $relatedProduct->name }}" style="object-fit: cover; height: 200px;">
+
+          <div class="card-body d-flex flex-column">
+            <!-- Product Name as a Link -->
+            <h5 class="card-title text-center">
+              <a href="{{ route('customer.storeDetails', ['id' => $relatedProduct->id]) }}" class="text-decoration-none text-dark">
+                {{ $relatedProduct->name }}
+              </a>
+            </h5>
+
+            <!-- Product Price -->
+            <p class="card-text text-center">${{ number_format($relatedProduct->price, 2) }}</p>
+
+            <!-- View Product Button as a Link -->
+            <a href="{{ route('customer.storeDetails', ['id' => $relatedProduct->id]) }}" class="btn btn-primary btn-sm mt-auto mx-auto d-block">View Product</a>
+          </div>
+        </div>
+      </div>
+      @endforeach
+    </div>
+  </div>
+</section>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function() {
-
-    // Quantity increase/decrease
+    // Quantity control
     $('.quantity-increase').click(function() {
       let qty = parseInt($('#productQuantity').val()) || 1;
       $('#productQuantity').val(qty + 1);
@@ -104,7 +133,7 @@
       }
     });
 
-    // AJAX Add to Cart
+    // Add to Cart with toast
     $('.add-to-cart').click(function(e) {
       e.preventDefault();
 
@@ -116,7 +145,7 @@
       const quantity = parseInt($('#productQuantity').val()) || 1;
 
       $.ajax({
-        url: "{{ route('customer.store.api') }}", // Updated to use the store-api route
+        url: "{{ route('customer.store.api') }}",
         method: 'POST',
         data: {
           _token: '{{ csrf_token() }}',
@@ -129,7 +158,8 @@
         success: function(response) {
           if (response.success) {
             $('.cart-count').text(response.count);
-            alert("Added to cart!");
+            $('#cart-toast .toast-body').text('Product added to cart!');
+            $('#cart-toast').fadeIn().delay(2000).fadeOut();
           }
         },
         error: function() {
@@ -137,6 +167,5 @@
         }
       });
     });
-
   });
 </script>

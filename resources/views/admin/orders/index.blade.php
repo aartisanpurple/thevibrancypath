@@ -16,11 +16,11 @@
             <div class="card">
                 <div class="card-body">
                     @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="mdi mdi-check-all me-2"></i>
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="mdi mdi-check-all me-2"></i>
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                     @endif
 
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -37,58 +37,52 @@
                             </tr>
                         </thead>
                         <tbody>
-                          @foreach($orders as $order)
+                            @foreach($orders as $order)
                             <tr>
-                              <td>{{ $order->id }}</td>
-                              <td>{{ $order->user->name }}</td>
-                              <td>$ {{ $order->total_amount }}</td>
-                              <td>
-                                @if($order->order_status == 0) Pending
-                                @elseif($order->order_status == 1) Confirmed
-                                @elseif($order->order_status == 2) Shipped
-                                @elseif($order->order_status == 3) Delivered
-                                @elseif($order->order_status == 4) Cancelled
-                                @endif
+                                <td>{{ $order->id }}</td>
+                                <td>{{ $order->user->name }}</td>
+                                <td>$ {{ $order->total_amount }}</td>
+                                <td>
+                                    @if($order->order_status == 0) Pending
+                                    @elseif($order->order_status == 1) Confirmed
+                                    @elseif($order->order_status == 2) Shipped
+                                    @elseif($order->order_status == 3) Delivered
+                                    @elseif($order->order_status == 4) Cancelled
+                                    @endif
                                 </td>
 
                                 <td>
-                                @if($order->payment_status == 0) Pending
-                                @elseif($order->payment_status == 1) Paid
-                                @elseif($order->payment_status == 2) Failed
-                                @endif
+                                    @if($order->payment_status == 0) Pending
+                                    @elseif($order->payment_status == 1) Paid
+                                    @elseif($order->payment_status == 2) Failed
+                                    @endif
                                 </td>
-                                <td>{{ $order->payment_method }}</td>
-                              <td>{{ $order->created_at }}</td>
-                              <td>
-                              <div class="d-flex gap-2">
-                                        <a href="{{ route('admin.orders.show', $order->id) }}" 
-                                           class="btn btn-info btn-sm" 
-                                           data-bs-toggle="tooltip" 
-                                           data-bs-placement="top" 
-                                           title="View">
+                                <td>
+                                    @if($order->payment_method == 1)
+                                    COD
+                                    @elseif($order->payment_method == 2)
+                                    Other
+                                    @else
+                                    Unknown
+                                    @endif
+                                </td>
+                                <td>{{ $order->created_at }}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('admin.orders.show', $order->id) }}"
+                                            class="btn btn-info btn-sm"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="View">
                                             <i class="bx bx-show"></i>
                                         </a>
-                                        <a href="{{ route('admin.orders.edit', $order->id) }}" 
-                                           class="btn btn-primary btn-sm"
-                                           data-bs-toggle="tooltip" 
-                                           data-bs-placement="top" 
-                                           title="Edit">
-                                            <i class="bx bx-edit"></i>
-                                        </a>
-                                        <button type="button" 
-                                                class="btn btn-danger btn-sm delete-product" 
-                                                data-id="{{ $order->id }}"
-                                                data-url="{{ route('admin.orders.destroy', $order->id) }}"
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-placement="top" 
-                                                title="Delete">
-                                            <i class="bx bx-trash"></i>
-                                        </button>
+
+
                                     </div>
 
-                              </td>
+                                </td>
                             </tr>
-                          @endforeach
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

@@ -23,5 +23,13 @@ class Orders extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+     
+     // Get the associated order address.
+     
+    public function order_address()
+    {
+        return $this->hasOne(OrderAddress::class, 'order_id');
+    }
     
 }

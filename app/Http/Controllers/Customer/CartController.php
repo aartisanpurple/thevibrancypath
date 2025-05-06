@@ -10,6 +10,7 @@ use App\Models\Contact;
 use App\Models\Testimonal;
 use App\Models\User;
 use App\Models\Address;
+use App\Models\OrderAddress;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\SubCategory;
@@ -36,14 +37,14 @@ class CartController extends Controller
     public function storelive()
     {
         $categories = Category::with('subcategories')->get();
-    
+
         $products = Product::with(['subcategory.category'])
             ->latest('created_at')
             ->paginate(6);
-    
+
         return view('store.storelive', compact('products', 'categories'));
     }
-    
+
     public function storeApi(Request $request)
     {
         // Handle AJAX Add to Cart
@@ -140,18 +141,24 @@ class CartController extends Controller
     public function storeDetails($id)
     {
         $store = Product::find($id);
-        $products = Product::leftJoin('subcategory', 'products.subcategory_id', '=', 'subcategory.id')
-            ->leftJoin('category', 'subcategory.parent_id', '=', 'category.id')
-            ->select(
-                'products.*',
-                'subcategory.id as subcategory_id',
-                'subcategory.name as subcategory_name',
-                'category.id as category_id',
-                'category.name as category_name'
-            )
-            ->latest('products.created_at')
+
+        // Eager load 'subcategory' and 'category' relationships
+        $products = Product::with([
+            'subcategory:id,name',  // Select only needed fields from the 'subcategory' table
+            'subcategory.category:id,name' // Eager load the parent 'category' and select only needed fields
+        ])
+            ->where('products.id', $id)  // Filter to fetch specific product if needed
+            ->latest('created_at')  // Order by 'created_at'
             ->get();
-        return view('store.store-detail', compact('store', 'products'));
+
+        $relatedProducts = Product::where('id', '!=', $store->id) // Exclude current product
+            ->inRandomOrder()  // Randomize the order
+            ->limit(3)  // Limit to 3 random products
+            ->get();
+
+
+
+        return view('store.store-detail', compact('store', 'products', 'relatedProducts'));
     }
     public function generateCartResponse($cart)
     {
@@ -270,24 +277,24 @@ class CartController extends Controller
                 'category.id as category_id',
                 'category.name as category_name'
             );
-    
+
         // Keyword Search
         if ($request->filled('keyword')) {
             $query->where(function ($q) use ($request) {
                 $q->where('products.name', 'like', '%' . $request->keyword . '%')
-                  ->orWhere('products.description', 'like', '%' . $request->keyword . '%');
+                    ->orWhere('products.description', 'like', '%' . $request->keyword . '%');
             });
         }
-    
+
         // Category/Subcategory Filter
         if ($request->filled('category_id')) {
             $query->where('category.id', $request->category_id);
         }
-    
+
         if ($request->filled('subcategory_id')) {
             $query->where('subcategory.id', $request->subcategory_id);
         }
-    
+
         // Sorting
         if ($request->sort == 'low_to_high') {
             $query->orderBy('products.price', 'asc');
@@ -296,17 +303,17 @@ class CartController extends Controller
         } else {
             $query->latest('products.created_at');
         }
-    
+
         $products = $query->paginate(6)->withQueryString();
-    
+
         if ($request->ajax()) {
             return view('store.partials.product-list', compact('products'))->render();
         }
-    
+
         $categories = Category::with('subcategories')->get();
         return view('store.storelive', compact('products', 'categories'));
     }
-    
+
 
     public function storeCheckoutview()
     {
@@ -314,61 +321,6 @@ class CartController extends Controller
     }
     public function storeCheckout(Request $request)
     {
-        // // Retrieve the cart from cookies
-        // $cart = json_decode(Cookie::get('cart', '[]'), true);
-
-        // if (empty($cart)) {
-        //     return redirect()->back()->with('error', 'Your cart is empty.');
-        // }
-
-        // // Validate the request (you may need to modify the rules based on your needs)
-        // $request->validate([
-        //     'first_name' => 'required|string',
-        //     'phone' => 'required',
-        //     'email' => 'required|email',
-        //     'address1' => 'required',
-        //     'country' => 'required',
-        //     'state' => 'required',
-        //     'city' => 'required',
-        //     'zip_code' => 'required',
-        // ]);
-
-        // // Calculate total price of the cart
-        // $subTotal = 0;
-        // foreach ($cart as $item) {
-        //     $subTotal += $item['price'] * $item['quantity'];
-        // }
-
-        // $totalAmount = $subTotal; // Add shipping/tax if applicable
-
-        // // Store the order in the Orders table
-        // $order = Orders::create([
-        //     'user_id' => 1,
-        //     'total_amount' => $totalAmount,
-        //     'order_status' => 0, // e.g., 0 = pending
-        //     'payment_status' => 0, // e.g., 0 = unpaid
-        //     'payment_method' => 1, // Payment method (can be modified)
-        //     'payment_id' => null, // This could be populated if using a payment gateway
-        // ]);
-
-        // // Save the order items in the OrderItems table
-        // foreach ($cart as $item) {
-        //     OrderItems::create([
-        //         'order_id' => $order->id,
-        //         'category_id' => $item['category_id'] ?? 1, // Handle category if provided
-        //         'subcategory_id' => $item['subcategory_id'] ?? 1, // Handle subcategory if provided
-        //         'product_id' => $item['id'],
-        //         'quantity' => $item['quantity'],
-        //         'price' => $item['price'],
-        //         'total_price' => $item['price'] * $item['quantity'],
-        //     ]);
-        // }
-
-        // // Clear the cart (if you want to clear it after the order is placed)
-        // Cookie::queue(Cookie::forget('cart'));
-
-        // // Optionally, redirect to a "thank you" or "order confirmation" page
-        // return redirect()->route('customer.storesuccess')->with('success', 'Your order has been placed successfully!');
 
         // Retrieve the cart from cookies
         $cart = json_decode(Cookie::get('cart', '[]'), true);
@@ -442,6 +394,12 @@ class CartController extends Controller
             'payment_id' => null,
         ]);
 
+        //  Save the order address (this is your new code)
+        OrderAddress::create([
+            'order_id' => $order->id,
+            'address_id' => $address->id,
+        ]);
+
         // Save order items
         foreach ($cart as $item) {
             OrderItems::create([
@@ -494,13 +452,20 @@ class CartController extends Controller
 
     public function storeinvoice($orderId)
     {
-        // Fetch order and related items with relationships needed for details invoice with customer module completed
-        $order = Orders::findOrFail($orderId);
-        $orderItems = OrderItems::where('order_id', $orderId)->get();
+        // Fetch order with order items and all related relationships needed for invoice
+        $order = Orders::with([
+            'order_items' => function ($query) {
+                $query->select('id', 'order_id', 'category_id', 'subcategory_id', 'product_id', 'quantity', 'price', 'total_price')
+                    ->with(['product', 'category', 'subcategory']); // Optional: if you have these relationships
+            },
+            'user' // Assuming the order is linked to a user (customer)
+        ])
+            ->select('id', 'user_id', 'total_amount', 'order_status', 'payment_status', 'payment_method', 'payment_id')
+            ->findOrFail($orderId);
 
         return view('store.invoice', [
             'order' => $order,
-            'orderItems' => $orderItems
+            'orderItems' => $order->order_items // Already loaded with relationships
         ]);
     }
     public function applyCoupon(Request $request)

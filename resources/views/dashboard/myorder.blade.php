@@ -5,8 +5,8 @@
   <div class="container">
     <div class="row">
       <!-- Sidebar -->
-
       @include('dashboard.partials.menu')
+
       <!-- Purchase Content -->
       <div class="col-lg-9">
         <div class="card p-4 shadow-sm border-0">
@@ -15,8 +15,7 @@
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-              <!-- <strong>From:</strong> 02/02/2025 &nbsp;
-        <strong>To:</strong> 01/04/2025 -->
+              <!-- <strong>From:</strong> 02/02/2025 &nbsp; <strong>To:</strong> 01/04/2025 -->
             </div>
             <div class="input-group" style="width: 250px;">
               <input type="text" class="form-control" placeholder="Search here.." />
@@ -32,9 +31,8 @@
                   <th>Order Number</th>
                   <th>Date</th>
                   <th>Items</th>
-                  <th>Total</th>
 
-
+                  <th>Invoice</th> <!-- Added a new column for the invoice link -->
                 </tr>
               </thead>
               <tbody>
@@ -42,7 +40,7 @@
                 <tr>
                   <td>{{ $index + 1 }}</td>
                   <td>{{ $order->id ?? 'N/A' }}</td>
-                  <td>{{ $order->created_at }}</td>
+                  <td>{{ $order->created_at ? $order->created_at->format('d/m/Y') : 'N/A' }}</td>
                   <td>
                     <ul class="list-unstyled mb-0">
                       @foreach($order->order_items as $item)
@@ -52,9 +50,9 @@
                       @endforeach
                     </ul>
                   </td>
-                  <td>${{ number_format($order->order_items->sum('price'), 2) }}</td>
-
-
+                  <td>
+                    <a href="{{ route('customer.storeinvoice', $order->id) }}" class="btn btn-sm btn-primary">View </a> <!-- Link to invoice -->
+                  </td>
                 </tr>
                 @empty
                 <tr>
@@ -69,5 +67,4 @@
     </div>
   </div>
 </section>
-
 @endsection

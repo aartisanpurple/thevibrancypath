@@ -3,7 +3,7 @@
         <div class="col-md-4">
             <div class="bg-white p-3 text-center h-100 d-flex flex-column justify-content-between product_card">
                 <div>
-                    <a href="#" class="text-decoration-none text-dark">
+                    <a href="{{ route('customer.storeDetails', ['id' => $product->id]) }}" class="text-decoration-none text-dark">
                         <div class="mb-3 d-flex align-items-center justify-content-center" style="height: 200px; overflow: hidden;">
                             <img src="{{ url('/' . $product->image) }}" class="img-fluid h-100" style="object-fit: cover;" alt="{{ $product->name }}">
                         </div>
@@ -31,6 +31,7 @@
         </div>
     @endforelse
 </div>
+
 
 @if ($products->hasPages())
     <div class="d-flex justify-content-center mt-4">

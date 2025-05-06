@@ -82,6 +82,15 @@
                     <label class="form-label">User Name</label>
                     <input type="text" name="user_name" class="form-control" id="user_user_name"  data-parsley-trigger="change">
                 </div>
+               
+                <div class="col-md-6">
+                    <label class="form-label">Mobile No</label>
+                    <input type="text" name="mobile_no" class="form-control" id="user_mobile_no"  data-parsley-trigger="change">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" id="user_email"  data-parsley-trigger="change">
+                </div>
                 <div class="col-md-6">
                     <label class="form-label">User Type</label>
                     <select name="user_type" class="form-select" id="user_user_type"  data-parsley-trigger="change">
@@ -92,30 +101,8 @@
                     <!-- Add more options as needed -->
                     </select>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label">Mobile No</label>
-                    <input type="text" name="mobile_no" class="form-control" id="user_mobile_no"  data-parsley-trigger="change">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Address</label>
-                    <input type="text" name="address" class="form-control" id="user_address"  data-parsley-trigger="change">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">City</label>
-                    <input type="text" name="city" class="form-control" id="user_city"  data-parsley-trigger="change">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Country</label>
-                    <input type="text" name="country" class="form-control" id="user_country"  data-parsley-trigger="change">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Postal Code</label>
-                    <input type="text" name="postal_code" class="form-control" id="user_postal_code"  data-parsley-trigger="change">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">State</label>
-                    <input type="text" name="state" class="form-control" id="user_state"  data-parsley-trigger="change">
-                </div>
+
+               
                 <div class="col-md-6">
                     <label class="form-label">Status</label>
                     <select name="status" class="form-select" id="user_status"  data-parsley-trigger="change">
