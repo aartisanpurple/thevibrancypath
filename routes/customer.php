@@ -97,6 +97,7 @@ Route::middleware(['auth', 'check.usertype:customer'])->prefix('customer')->grou
     Route::get('/mymembership', [DashboardController::class, 'mymembership'])->name('customer.mymembership');
     Route::get('/mycourses', [DashboardController::class, 'myordercourses'])->name('customer.mycourses');
     Route::get('/coaching-appointment', [DashboardController::class, 'coachingappointment'])->name('customer.coachingappointment');
+    Route::get('/favorite', [DashboardController::class, 'favorite'])->name('customer.favorite');
     // Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders');
     // Route::get('/profile', [ProfileController::class, 'show'])->name('customer.profile');
      Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('customer.logout');

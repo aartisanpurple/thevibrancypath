@@ -10,6 +10,7 @@ use App\Models\Orders;
 use App\Models\Membership;
 use App\Models\Appointment;
 use App\Models\UserMembership;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
@@ -77,7 +78,18 @@ class DashboardController extends Controller
 
         return view('dashboard.coachingappointment', compact('user', 'orders'));
     }
+    public function favorite()
+    {
+        $user = Auth::user();
 
+        // Get wishlist items for the authenticated user
+        $wishlists = Wishlist::where('user_id', $user->id)
+            ->with('product') // Eager load the related product
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        return view('dashboard.wishlist', compact('user', 'wishlists'));
+    }
 
     public function mymembership()
     {
