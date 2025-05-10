@@ -21,7 +21,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <!-- Custom CSS -->
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/stylenew.css') }}" rel="stylesheet">
+
 </head>
 
 <body>

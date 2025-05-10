@@ -64,7 +64,7 @@
     <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-            <form id="userForm" method="POST" action="{{ route('admin.user.store') }}" data-parsley-validate>
+            <form id="userForm" method="POST" action="" data-parsley-validate>
                 @csrf
                 <input type="hidden" name="id" id="user_id">
 

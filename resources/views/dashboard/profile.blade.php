@@ -12,8 +12,8 @@
         <div class="card p-4 shadow-sm border-0">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="mb-0">Edit your Account</h4>
-            <!-- <a href="#" style="color: #8b0078; font-weight: 500;" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change password</a>
-           -->
+            <a href="#" style="color: #8b0078; font-weight: 500;" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change password</a>
+          
           </div>
 
           <form method="POST" action="">

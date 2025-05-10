@@ -37,8 +37,14 @@ class UserController extends Controller
                 $user->update($request->all());  
                 $message = 'User updated successfully!';
             }else{
+
+                    
+$data = $request->all();
+$data['password'] = bcrypt('password123'); 
+
+$user = User::create($data);
                         
-                $user = User::create($request->all());
+               // $user = User::create($request->all());
                 $message = 'User added successfully!';
             }
             if ($request->ajax()) {

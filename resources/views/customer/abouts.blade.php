@@ -1,5 +1,9 @@
 @extends('layouts.customer.app')
-
+<style>
+    .bg-vibrancy {
+    background-color: #faebf0;
+}
+</style>
 @section('content')
 <!-- Hero Section -->
 <section class="inner_banner">
@@ -78,7 +82,7 @@
                 <div class="row">
                     <div class="col-lg-5 col-md-12">
                         <div class="one-person-img text-center">
-                            <img src="{{ asset('assets/images/discover-vs.png') }}" alt="one-person-img" class="img-fluid">
+                            <img src="{{ asset('assets/images/About-soul1.png') }}" alt="one-person-img" class="img-fluid">
                         </div>
                     </div>
                     <div class="col-lg-7 col-md-12">
@@ -106,7 +110,7 @@
 
 
     <section class="potential-section py-5" >
-        <img src="{{ asset('assets/images/top-shape.svg') }}" class="curev_shape top_shape w-100" />
+        <img src="images/top-shape.svg" class="curev_shape top_shape w-100" />
         <div class="container">
             <div class="row gy-4 align-items-center">
                 <div class="col-lg-7 col-md-12">
@@ -118,12 +122,13 @@
                 </div>
                 <div class="col-lg-5 col-md-12">
                     <div class="discover-vs-img text-center">
-                        <img src="{{ asset('assets/images/discover-vs.png') }}" alt="vibrancy-sign" class="img-fluid">
+                        <img src="{{ asset('assets/images/About-soul2.png') }}" alt="vibrancy-sign" class="img-fluid">
                     </div>
                 </div>
             </div>
             
         </div>
     </section>
+
 
 @endsection

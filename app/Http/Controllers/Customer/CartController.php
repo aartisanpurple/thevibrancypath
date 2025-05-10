@@ -204,6 +204,23 @@ class CartController extends Controller
             'reviewCount'
         ));
     }
+
+    public function storecategory($subcategory_id)
+    {
+        $categories = Category::with('subcategories')->get();
+
+        $products = Product::with(['subCategory.category'])
+            ->where('subcategory_id', $subcategory_id)
+            ->latest('created_at')
+            ->paginate(6);
+    
+        return view('store.storecategory', compact('products', 'categories', 'subcategory_id'));
+    }
+
+
+  
+
+
     public function generateCartResponse($cart)
     {
         $subtotal = 0;

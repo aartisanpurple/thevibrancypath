@@ -41,7 +41,6 @@
                                     <textarea class="form-control" id="message" name="message" required parsley-trigger="change" parsley-required="true" placeholder="Enter Message">{{ old('message') }}</textarea>
                                 @endif
                             </div>
-
                             <div class="mb-3 col-6">
                                 <label for="photo" class="form-label">Photo</label>
                                 <div class="avatar-upload">
@@ -56,11 +55,11 @@
                                     <div class="avatar-preview">
                                         @if (isset($testimonial->image))
                                             <div id="imagePreview"
-                                                style="background-image: url({{ asset($testimonial->image) }});">
+                                               >
                                             </div>
                                         @else
                                             <div id="imagePreview"
-                                                style="background-image: url({{ asset('assets/images/users/profile-blank.jpeg') }});">
+                                           >
                                             </div>
                                         @endif
                                     </div>

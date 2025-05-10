@@ -7,53 +7,53 @@
         <h1 style="margin-left: -400px;">Live Your Soul’s Purpose</h1>
         <h1 style="margin-left: 450px;">with Passion and Power.</h1>
     </div>
+    <!-- <div class="wave-shape"></div> -->
 </section>
 
- <!-- About Section -->
- <section id="about" class="py-5">
+
+
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
         <div class="container">
-            <div class="row gy-4 align-items-center">
+            <div class="row gy-2 align-items-center">
                 <div class="col-lg-5 col-md-6">
                     <div class="profile-image">
-                        <img src="{{ asset('assets/images/about-new.png') }}" alt="Jamie" class="img-fluid" >
+                        <img src="{{ asset('assets/images/about-new.png') }}" alt="Jamie" class="img-fluid">
                     </div>
                 </div>
-                <div class="col-lg-7 col-md-10">
+                <div class="col-lg-6 col-md-10">
                     <h2>About Vibrancy Path</h2>
                     <p>You’re one of a kind, and it’s time to radiate your own unique light into the world!
-
-                        <br>
-                        <br>
                         What brings you most alive, keeps you energetic and healthy, and makes your life really work for you? It’s written in your very own cells! Whether it’s finding clarity in your purpose, improving relationships, mastering your health or creating harmony within your family, the Vibrancy Path is here to guide you every step of the way toward living authentically, confidently, and vibrantly. It All Starts with the Vibrancy Signature.</p>
                   
-                    </a>
                 </div>
+
+                
             </div>
         </div>
     </section>
-
    <!--video section-->
    <section class="video-section py-lg-5 py-lg-0 pb-5">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-lg-10 inner-video-section">
                     <div class="video_res embed-responsive embed-responsive-16by9">
-                    <video id="discover" class="embed-responsive-item video-frame" 
-       poster="{{ asset('assets/images/video-thumbnail.png') }}">
-    <source src="{{ asset('assets/video/welcome.mp4') }}" type="video/mp4">
-</video>
-
+                        <video id="discover" class="embed-responsive-item video-frame" >
+                            <source src="{{ asset('assets/images/Jamie-video.crdownload') }}" type="video/mp4">
+                        </video>
                         <div class="video_overlay">
                             <div class="play_btn">
                                 <i id="icon" class="ri-play-fill"></i>
                             </div>
-                            <h3>Transform Your Life with the Vibrancy Signature</h3>
+                            <h3>Discover the Blueprint to Your Soul</h3>
                         </div>
                     </div>
                     <div class="text-center mt-4">
-                    <a href="#about" class="btn btn-primary">Learn more about Vibrancy Signature
-                        <i class="fa-solid fa-arrow-right-long ms-2"></i>
-                    </a>
+    <a href="{{ route('customer.vibrancy-signature') }}" class="btn btn-primary">
+        Learn more about Vibrancy Signature
+        <i class="fa-solid fa-arrow-right-long ms-2"></i>
+    </a>
 </div>
 
                 </div>
@@ -133,7 +133,7 @@
 
         </div>
     </section> -->
-    <section id="testimonials" class="py-5 bg-testimonials">
+    <section id="testimonials" class="py-5">
     <h2 class="text-center mb-4">Client Testimonials</h2>
     <div class="container position-relative">
         <div class="swiper mySwiper">
@@ -163,10 +163,8 @@
     </div>
 </section>
 
-
-
-      <!-- Meet Jamie Section -->
-      <section class="meet-jamie py-lg-5 py-md-5 py-sm-5  pb-0">
+    <!-- Meet Jamie Section -->
+    <section class="meet-jamie py-lg-5 py-md-5 py-sm-5  pb-0">
         <div class="container">
             <div class="row gy-4 align-items-center">
                 <div class="col-lg-7 col-md-12">
@@ -177,7 +175,8 @@
                         energetic patterns and the role they play in a person’s self expression, health and relationship
                         to life, he translates them into actionable insights that help you uncover your gifts, align
                         with your purpose, and live the vibrant life you were born for.</p>
-                    
+                    <a href="#contact" class="btn btn-primary">Learn More About Jamie <i
+                            class="fa-solid fa-arrow-right-long ms-2"></i></a>
                 </div>
                 <div class="col-lg-5 col-md-6">
                     <div class="jamie-images">

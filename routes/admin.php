@@ -12,6 +12,9 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\ShipingController;
+
 // Admin Registration & Login
 Route::prefix('admin')->group(function () {
     Route::get('/register', [UserController::class, 'showRegisterForm'])->name('admin.register');
@@ -35,6 +38,7 @@ Route::middleware(['auth', 'check.usertype:admin'])->prefix('admin')->group(func
         'destroy' => 'admin.blog.destroy',
         'show' => 'admin.blog.show',
     ]);
+
     Route::resource('testimonial', TestimonialController::class)->names([
         'index' => 'admin.testimonial.index',
         'create' => 'admin.testimonial.create',
@@ -44,6 +48,28 @@ Route::middleware(['auth', 'check.usertype:admin'])->prefix('admin')->group(func
         'destroy' => 'admin.testimonial.destroy',
         'show' => 'admin.testimonial.show',
     ]);
+
+    Route::resource('coupon', CouponController::class)->names([
+        'index'   => 'admin.coupon.index',
+        'create'  => 'admin.coupon.create',
+        'store'   => 'admin.coupon.store',
+        'edit'    => 'admin.coupon.edit',
+        'update'  => 'admin.coupon.update',
+        'destroy' => 'admin.coupon.destroy',
+        'show'    => 'admin.coupon.show',
+    ]);
+
+    Route::resource('shiping', ShipingController::class)->names([
+        'index'   => 'admin.coupon.index',
+        'create'  => 'admin.coupon.create',
+        'store'   => 'admin.coupon.store',
+        'edit'    => 'admin.coupon.edit',
+        'update'  => 'admin.coupon.update',
+        'destroy' => 'admin.coupon.destroy',
+        'show'    => 'admin.coupon.show',
+    ]);
+    
+    
     Route::resource('contact', ContactController::class)->names([
         'index' => 'admin.contact.index',
         'create' => 'admin.contact.create',

@@ -31,12 +31,12 @@
                             <div class="mb-3 col-6">
                                 <label for="blogAuthor" class="form-label">Author</label>
                                 <input type="text" class="form-control" id="blogAuthor" name="author" required
-                                    placeholder="Enter author name" value="{{ $blog->author ?? '' }}">
+                                    placeholder="Enter author name" value="{{ $blog->author ?? Auth::user()->name }}">
                             </div>
 
                             <div class="mb-3 col-6">
                                 <label for="blogDate" class="form-label">Date Published</label>
-                                <input type="date" class="form-control" id="blogDate" name="datePublished" required value="{{ $blog->published_at ?? '' }}">
+                                <input type="date" class="form-control" id="blogDate" name="datePublished" required value="{{ isset($blog->published_at) ? \Carbon\Carbon::parse($blog->published_at)->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d') }}">
                             </div>
 
                             <div class="mb-3">
@@ -45,7 +45,33 @@
                                     {!! $blog->content ?? '' !!}
                                 </div>
                             </div>
-
+                            <div class="mb-3 col-6">
+                                <label for="photo" class="form-label">Photo</label>
+                                <div class="avatar-upload">
+                                    <div class="avatar-edit">
+                                        @if (isset($blog->image))
+                                            <input type='file' id="imageUpload" name="image" accept=".png, .jpg, .jpeg" parsley-trigger="change" parsley-required="true" />
+                                        @else
+                                            <input type='file' id="imageUpload" name="image" accept=".png, .jpg, .jpeg" parsley-trigger="change" parsley-required="true" />
+                                        @endif
+                                        <label for="imageUpload"></label>
+                                    </div>
+                                    <div class="avatar-preview">
+                                        @if (isset($blog->image))
+                                            <div id="imagePreview"
+                                               >
+                                            </div>
+                                        @else
+                                            <div id="imagePreview"
+                                           >
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                @if (isset($blog->image))
+                                    <input type="hidden" name="existing_image" value="{{ $blog->image }}">
+                                @endif
+                            </div>
                         </div>
                         @if (isset($blog->id))
                             <input type="hidden" name="blog_id" value="{{ $blog->id }}">

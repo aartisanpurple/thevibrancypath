@@ -5,7 +5,6 @@
   <div class="container">
     <div class="row">
       <!-- Sidebar -->
-      
       @include('dashboard.partials.menu')
       <!-- Account Edit Content -->
       <div class="col-lg-9">

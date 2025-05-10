@@ -1,7 +1,7 @@
    <!-- Navigation -->
    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
        <div class="container">
-           <a class="navbar-brand" href="#">
+           <a class="navbar-brand" href="{{ route('customer.home') }}">
                <img src="{{ asset('assets/images/logo-frontend.svg') }}" alt="">
            </a>
            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -9,7 +9,15 @@
            </button>
            <div class="collapse navbar-collapse" id="navbarNav">
                <ul class="navbar-nav mx-auto">
-                   <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.home') ? 'active' : '' }}" href="{{ route('customer.home') }}">Home</a></li>
+               <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle active" href="{{ route('customer.vibrancy-signature') }}" id="homeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Home
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="homeDropdown">
+        <li><a class="dropdown-item" href="{{ route('customer.vibrancy-signature') }}">Vibrancy Signature</a></li>
+      
+    </ul>
+</li>
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.about') ? 'active' : '' }}" href="{{ route('customer.about') }}">About</a></li>
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.course') ? 'active' : '' }}" href="{{ route('customer.courses') }}">Courses</a></li>
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.store') ? 'active' : '' }}" href="{{ route('customer.store') }}">Store</a></li>
@@ -18,19 +26,19 @@
                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}" href="{{ route('customer.contact') }}">Contact</a></li>
                </ul>
                <div class="nav-icons">
-                   
-                   @auth 
-                   
-                
-                   <a href="{{ route('customer.dashboard') }}"><i class="ri-user-line"> {{ Auth::user()->name ?? 'User' }}  </i></a>
+
+                   @auth
+
+
+                   <a href="{{ route('customer.dashboard') }}"><i class="ri-user-line"> {{ Auth::user()->name ?? 'User' }} </i></a>
 
                    @else
 
-                   
+
                    <a href="{{ route('login') }}"><i class="ri-user-line"> Login </i></a>
 
-                   
-                   @endauth 
+
+                   @endauth
                    <a href="javascript:void(0)"><i class="ri-search-line"></i></a>
                    @php
                    $cart = json_decode(request()->cookie('cart'), true) ?? [];

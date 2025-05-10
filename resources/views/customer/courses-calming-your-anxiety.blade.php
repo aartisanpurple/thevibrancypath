@@ -33,7 +33,7 @@
           And without having to rely on raw will power…which is a sure way to take the fun out of success!
         </p>
         <a href="store-search?subcategory_id=15" class="btn px-4 py-2 rounded-pill text-white" style="background-color: #86007d;">
-          Sign Me Up <i class="fa-solid fa-arrow-right-long ms-2"></i>
+        Learn more <i class="fa-solid fa-arrow-right-long ms-2"></i>
         </a>
       </div>
     </div>
@@ -146,7 +146,7 @@
         <!-- Centered Button -->
         <div class="text-center">
           <a href="store-search?subcategory_id=15" class="btn px-4 py-2 rounded-pill text-white" style="background-color: #86007d;">
-            Sign Me Up <i class="fa-solid fa-arrow-right-long ms-2"></i>
+          Learn more <i class="fa-solid fa-arrow-right-long ms-2"></i>
           </a>
         </div>
 

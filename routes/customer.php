@@ -51,6 +51,7 @@ Route::post('/membership-checkout', [HomeController::class, 'membershipcheckout'
 
 //Store cart 
 Route::get('/store', [CartController::class, 'store'])->name('customer.store');
+Route::get('/store-category/{id}', [CartController::class, 'storecategory'])->name('customer.store-category');
 Route::get('/storelive', [CartController::class, 'storelive'])->name('customer.storelive');
 Route::get('/store-searchlive', [CartController::class, 'searchlive'])->name('customer.storesearchlive');
 Route::get('/store-details/{id}', [CartController::class, 'storeDetails'])->name('customer.storeDetails');
